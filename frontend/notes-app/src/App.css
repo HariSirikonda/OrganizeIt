@@ -1,0 +1,95 @@
+.dropdown-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.dropdown-item:hover {
+    background-color: #f2f2f2;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 62px;
+    right: 10px;
+    width: 260px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+}
+
+.plus {
+    position: fixed;
+    bottom: 60px;
+    right: 60px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+}
+
+.notes-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.profile-dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.nav-color {
+    background-color: rgb(93, 24, 233);
+}
+
+.done-status {
+    background-color: rgb(180, 231, 214);
+    padding: 2px;
+}
+
+.progress-status {
+    background-color: rgb(251, 230, 210);
+    padding: 2px;
+}
+
+.not-started-status {
+    background-color: rgb(243, 216, 218);
+    padding: 2px;
+}
+
+/* Apply this to the container with the scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
