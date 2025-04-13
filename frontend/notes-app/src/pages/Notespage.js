@@ -45,9 +45,7 @@ function Notespage() {
     ];
 
     const [addNote, setAddNote] = useState(false);
-    useEffect(() => {
 
-    })
     return (
         <div>
             <Navbar />
