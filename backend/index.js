@@ -199,6 +199,41 @@ app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
     }
 });
 
+//update Pinned
+app.put("/update-note/:noteId", authenticateToken, async (req, res) => {
+    const noteId = req.params.noteId;
+    const { pinned } = req.body;
+    const { user } = req;
+
+    try {
+        const note = await Note.findById(noteId);
+
+        if (!note) {
+            return res.status(404).json({
+                error: true,
+                message: "Note not found"
+            });
+        }
+
+        if (pinned) note.pinned = pinned;
+
+        await note.save();
+
+        return res.json({
+            error: false,
+            note,
+            message: "Note updated successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            error: true,
+            message: "Internal Server error",
+            details: error.message
+        });
+    }
+});
+
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
