@@ -42,17 +42,11 @@ function Notes({ title, date, discription, status }) {
                 <div className='p-1'>
                     {discription}
                 </div>
-                <div className='d-flex p-1'>
-                    <div>
-                        --- Attachments
-                    </div>
-                </div>
                 <div className="d-flex justify-content-end">
                     <button className='btn shadow-sm' onClick={() => { setPinned(!pinned) }}>
                         <img src={pinned ? Pinned : Pin} alt='show me' style={{ width: "20px", height: "20px" }} />
                     </button>
                 </div>
-
             </div>
         </div>
     )

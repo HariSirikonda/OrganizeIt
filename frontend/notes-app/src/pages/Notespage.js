@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Notes from '../components/Notes';
 import PlusIcon from '../assets/plus.png';
@@ -45,7 +45,9 @@ function Notespage() {
     ];
 
     const [addNote, setAddNote] = useState(false);
+    useEffect(() => {
 
+    })
     return (
         <div>
             <Navbar />
@@ -69,17 +71,14 @@ function Notespage() {
                     <div className='d-flex align-items-end justify-content-end'>
                         <img className='m-1' src={CloseIcon} alt='Close' style={{ width: '30px', height: '30px' }} onClick={() => setAddNote(false)} />
                     </div>
-
                     <div className='p-2 mb-1'>
                         <h5>Title of the Notes</h5>
                         <input className='form-control shadow-none' type='text' placeholder='Write your title here' required />
                     </div>
-
                     <div className='p-2 mb-1'>
                         <h5>Description</h5>
                         <textarea className='form-control shadow-none' style={{ height: '150px' }} placeholder='Write your description here' required></textarea>
                     </div>
-
                     <div className='d-flex p-2 mb-1 align-items-center'>
                         <div className='d-flex w-50 align-items-center justify-content-start mx-1'>
                             <div className='me-2'>
@@ -96,9 +95,6 @@ function Notespage() {
                                 <label className="btn-sm btn-outline-primary shadow-none" htmlFor="btnradio3">Done</label>
                             </div>
                         </div>
-                        <div className='d-flex w-50 align-items-center justify-content-start border-0 shadow-none mx-1'>
-                            <input class="form-control shadow-none" type="file" id="formFileMultiple" multiple />
-                        </div>
                     </div>
                     <div className='d-flex align-items-end justify-content-end mt-2 mb-0'>
                         <div>
@@ -108,7 +104,6 @@ function Notespage() {
                     </div>
                 </div>
             )}
-
             <div
                 className='plus rounded-circle shadow add-notes'
                 onClick={() => {

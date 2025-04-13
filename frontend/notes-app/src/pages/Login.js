@@ -1,9 +1,8 @@
 import React from 'react'
-import GoogleIcon from '../assets/google-icon.svg';
-import LinkedIcon from '../assets/linkedin-icon.svg';
-import FacebookIcon from '../assets/facebook-icon.svg';
-import Back from '../assets/back.png';
-import { Link, useNavigate } from 'react-router-dom';
+import GoogleIcon from '../assets/google.png';
+import LinkedIcon from '../assets/linkedin.png';
+import FacebookIcon from '../assets/facebook.png';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 function Login() {
@@ -29,15 +28,15 @@ function Login() {
                     </div>
                     <button id="ContinueButton" type="submit" className="submit_btn btn btn-md btn-primary w-100 my-2 p-1"><b>Login</b></button>
                     <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
-                    <div className='m-2 d-flex align-items-center justify-content-center'>
+                    <div className='m-1 d-flex align-items-center justify-content-center'>
                         <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='show me' src={GoogleIcon}></img>
+                            <img className='m-1 p-0' alt='show me' src={GoogleIcon} style={{ width: "30px", height: "30px" }}></img>
                         </div>
                         <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='show me' src={FacebookIcon}></img>
+                            <img className='m-1 p-0' alt='show me' src={FacebookIcon} style={{ width: "30px", height: "30px" }}></img>
                         </div>
                         <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='show me' src={LinkedIcon}></img>
+                            <img className='m-1 p-0' alt='show me' src={LinkedIcon} style={{ width: "30px", height: "30px" }}></img>
                         </div>
                     </div>
                 </form>

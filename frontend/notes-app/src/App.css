@@ -42,7 +42,7 @@
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 0.3s ease-in-out;
+    animation: fadeIn 0.2s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -63,7 +63,6 @@
     border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
-    transition: background 0.2s ease;
 }
 
 .nav-color {
