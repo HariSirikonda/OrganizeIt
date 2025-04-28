@@ -3,8 +3,31 @@ import Navbar from '../components/Navbar';
 import Notes from '../components/Notes';
 import PlusIcon from '../assets/plus.png';
 import CloseIcon from '../assets/remove.png';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../utils/axiosInstance';
 
 function Notespage() {
+    const [userInfo, setUserInfo] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
+    const getUserInfo = async () => {
+        try {
+            const response = await axiosInstance.get("/get-user");
+            if (response.data && response.data.user) {
+                setUserInfo(response.data.user);
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                localStorage.clear();
+                navigate('/login');
+                setIsLoggedIn(true);
+            }
+        }
+    };
+    useEffect(() => {
+        getUserInfo()
+        return () => { };
+    },)
     const notesData = [
         {
             title: "This is the title",
@@ -48,7 +71,7 @@ function Notespage() {
 
     return (
         <div>
-            <Navbar />
+            <Navbar UserInformation={userInfo} loggedInState={isLoggedIn} />
             <div className="container webkit-scrollbar">
                 <div className="row">
                     {notesData.map((note, index) => (

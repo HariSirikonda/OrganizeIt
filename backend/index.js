@@ -60,30 +60,38 @@ app.post("/create-account", async (req, res) => {
 //Login route
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
+
     if (!email) {
-        return res.status(400).json({ message: "Email is required..!" })
+        return res.status(400).json({ message: "Email is required..!" });
     }
     if (!password) {
-        return res.status(400).json({ message: "Password is required..!" })
+        return res.status(400).json({ message: "Password is required..!" });
     }
+
     const userInfo = await User.findOne({ email: email });
     if (!userInfo) {
         return res.status(400).json({ message: "User Not Found" });
     }
-    if (userInfo.email == email && userInfo.password == password) {
+
+    if (userInfo.password === password) {
         const user = { user: userInfo };
         const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "36000m" });
+
         return res.json({
             error: false,
             message: "Login Successful",
             email,
             accessToken,
+            user: {
+                _id: userInfo._id,      // ✅ added this
+                fullName: userInfo.fullName // optional
+            }
         });
-    }
-    else {
+    } else {
         return res.status(400).json({ error: true, message: "Invalid credentials" });
     }
 });
+
 
 // Get User
 app.get("/get-user", authenticateToken, async (req, res) => {
@@ -113,6 +121,7 @@ app.get("/get-user", authenticateToken, async (req, res) => {
         });
     }
 });
+
 
 
 //Add Note Route

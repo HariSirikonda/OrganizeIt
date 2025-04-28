@@ -4,9 +4,8 @@ import Search from '../assets/search.png';
 import Remove from '../assets/remove.png';
 import User from '../assets/user.png';
 
-function Navbar() {
+function Navbar({ UserInformation, loggedInState }) {
     const [search, setSearch] = useState('');
-    const [loggedIn] = useState(true);
     const [profileClick, setProfileClick] = useState(false);
     const handleProfileClick = () => setProfileClick(!profileClick);
     const navigate = useNavigate()
@@ -21,6 +20,10 @@ function Navbar() {
     const handleEditProfile = (e) => {
         e.preventDefault();
         navigate('/profile')
+    }
+    const onLogout = (e) => {
+        navigate('/login');
+        localStorage.clear();
     }
     return (
         <div>
@@ -47,25 +50,30 @@ function Navbar() {
                             }
                             <img className='m-1 p-1' src={Search} alt='show me' style={{ width: '28px', height: '28px' }}></img>
                         </div>
+                        {loggedInState &&
+                            <div className='d-flex w-25 justify-content-end'>
+                                <div className='m-1'>
+                                    <button className="btn btn-sm bg-white" onClick={handleLogin}><b>Login</b></button>
+                                </div>
+                                <div className='m-1'>
+                                    <button className="btn btn-sm bg-white" onClick={handleSignUp}><b>Register</b></button>
+                                </div>
+                            </div>
+                        }
                         <div className='d-flex w-25 justify-content-end'>
-                            <div className='m-1'>
-                                <button className="btn btn-sm bg-white" onClick={handleLogin}><b>Login</b></button>
-                            </div>
-                            <div className='m-1'>
-                                <button className="btn btn-sm bg-white" onClick={handleSignUp}><b>Register</b></button>
-                            </div>
                             <button className='bg-white border-0 rounded-circle m-1' style={{ width: '32px', height: '32px' }} onClick={handleProfileClick}>
                                 <img className='img-fluid' src={User} alt='show me'></img>
                             </button>
                         </div>
                     </div>
-                    {profileClick && loggedIn &&
+                    {profileClick &&
                         <div className='profile-dropdown border'>
+                            <p className='text-dark fw-bold text-center'>{UserInformation.fullName}</p>
                             <button className='btn form-control text-start shadow-none' onClick={handleEditProfile}>Edit Profile</button>
                             <button className='btn form-control text-start shadow-none'>Settings & Profile</button>
                             <button className='btn form-control text-start shadow-none'>Help & Support</button>
                             <button className='btn form-control text-start shadow-none'>Display & Accessibility</button>
-                            <button className='btn form-control text-start shadow-none text-danger'>Logout</button>
+                            <button className='btn form-control text-start shadow-none text-danger' onClick={onLogout}>Logout</button>
                         </div>
                     }
                 </div>

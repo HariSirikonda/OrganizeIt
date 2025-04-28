@@ -1,27 +1,64 @@
-import React from 'react'
+import React, { useState } from 'react';
 import GoogleIcon from '../assets/google.png';
 import LinkedIcon from '../assets/linkedin.png';
 import FacebookIcon from '../assets/facebook.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import axiosInstance from '../utils/axiosInstance';
 
 function Login() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const handleLogin = async (e) => {
+        e.preventDefault(); // prevent page reload
+        if (!email) {
+            setError("Please enter an Email Address.");
+            return;
+        }
+        if (!password) {
+            setError("Please enter a password.");
+            return;
+        }
+
+        try {
+            const response = await axiosInstance.post("/login", { email: email, password: password });
+            if (response.data && response.data.accessToken) {
+                localStorage.setItem("token", response.data.accessToken);
+                navigate("/home");
+            }
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message);
+            } else {
+                setError("An Unexpected error occured, try again.!");
+            }
+        }
+    };
+
     return (
         <>
             <Navbar />
             <section className='container-fluid d-flex align-items-center justify-content-center p-5'>
-                <form className="border rounded bg-white shadow p-5 m-2 border fade-in" style={{ width: '500px', height: '500px' }}>
+                <form
+                    onSubmit={handleLogin}
+                    className="border rounded bg-white shadow p-5 m-2 border fade-in"
+                    style={{ width: '500px', height: '500px' }}
+                >
                     <h3 className="text-dark fw-bolder fs-4 mt-1">Login to OrganizeIt</h3>
                     <div className="fw-normal text-muted mb-2">
                         New Here? <Link className="text-primary text-decoration-none fw-bold">Create an Account</Link>
                     </div>
+                    {error && <p className="text-danger">{error}</p>}
                     <div className="form-floating mb-2 ">
-                        <input type="email" className="form-control" id="Username" placeholder="name@example.com" />
-                        <label for="floatingInput">Email address</label>
+                        <input type="email" className="form-control shadow-none" id="Username" onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" required />
+                        <label htmlFor="Username">Email address</label>
                     </div>
                     <div className="form-floating ">
-                        <input type="password" className="form-control" id="Password" placeholder="Password" />
-                        <label for="floatingPassword">Password</label>
+                        <input type="password" className="form-control shadow-none" id="Password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+                        <label htmlFor="Password">Password</label>
                     </div>
                     <div className="mt-2 text-end">
                         <Link className="text-primary" to="/forgot-Password">Forget Password</Link>
@@ -30,19 +67,19 @@ function Login() {
                     <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
                     <div className='m-1 d-flex align-items-center justify-content-center'>
                         <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='show me' src={GoogleIcon} style={{ width: "30px", height: "30px" }}></img>
+                            <img className='m-1 p-0' alt='google' src={GoogleIcon} style={{ width: "30px", height: "30px" }} />
                         </div>
                         <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='show me' src={FacebookIcon} style={{ width: "30px", height: "30px" }}></img>
+                            <img className='m-1 p-0' alt='facebook' src={FacebookIcon} style={{ width: "30px", height: "30px" }} />
                         </div>
                         <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='show me' src={LinkedIcon} style={{ width: "30px", height: "30px" }}></img>
+                            <img className='m-1 p-0' alt='linkedin' src={LinkedIcon} style={{ width: "30px", height: "30px" }} />
                         </div>
                     </div>
                 </form>
             </section>
         </>
-    )
+    );
 }
 
-export default Login
+export default Login;
