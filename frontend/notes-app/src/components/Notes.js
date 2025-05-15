@@ -8,13 +8,12 @@ function Notes({ title, date, discription, status }) {
     const [pinned, setPinned] = useState(true);
     return (
         <div>
-            <div className='box border-0 rounded shadow p-3 m-1 mb-3' style={{ width: '420px' }}>
+            <div className='box rounded shadow p-2 mt-1 mb-3' style={{ width: '420px' }}>
                 <div className='d-flex align-items-center ps-1'>
                     <div className='me-2'>
                         <h4 className='m-0'>{title}</h4>
                     </div>
                     <div className='d-flex align-items-center ms-auto'>
-
                         <button className='btn shadow-sm'>
                             <img src={Edit} alt='edit' style={{ width: '20px', height: '20px' }} />
                         </button>
@@ -35,11 +34,10 @@ function Notes({ title, date, discription, status }) {
                         </div>
                     </div>
                 </div>
-                <div className='ps-1 text-dark align-items-center justify-content-center'>
-                    <span className='bg-light rounded px-1'>{date}</span>
-                    <span></span>
+                <div>
+                    <span className='text-start rounded px-1 fs-8'>{date}</span>
                 </div>
-                <div className='p-1'>
+                <div className='m-1 pt-2 pb-2'>
                     {discription}
                 </div>
                 <div className="d-flex justify-content-end">

@@ -65,12 +65,17 @@
     font-size: 14px;
 }
 
+.center {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
 .nav-color {
     background-color: rgb(93, 24, 233);
 }
 
 .done-status {
-    background-color: rgb(180, 231, 214);
+    background-color: rgb(204, 255, 204);
     padding: 2px;
 }
 

@@ -10,6 +10,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+    const [hide, setHide] = useState(true);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -40,44 +41,46 @@ function Login() {
 
     return (
         <>
-            <Navbar />
-            <section className='container-fluid d-flex align-items-center justify-content-center p-5'>
-                <form
-                    onSubmit={handleLogin}
-                    className="border rounded bg-white shadow p-5 m-2 border fade-in"
-                    style={{ width: '500px', height: '500px' }}
-                >
-                    <h3 className="text-dark fw-bolder fs-4 mt-1">Login to OrganizeIt</h3>
-                    <div className="fw-normal text-muted mb-2">
-                        New Here? <Link className="text-primary text-decoration-none fw-bold">Create an Account</Link>
+            <form
+                onSubmit={handleLogin}
+                className="border rounded bg-white shadow p-5 border fade-in"
+                style={{ width: '500px', height: '500px' }}
+            >
+                <h3 className="text-dark fw-bolder fs-4 mt-1">Login to OrganizeIt</h3>
+                <div className="fw-normal text-muted mb-2">
+                    New Here? <Link className="text-primary text-decoration-none fw-bold" to='/signup'>Create an Account</Link>
+                </div>
+                {error && <p className="text-danger">{error}</p>}
+                <div className="form-floating mb-2 ">
+                    <input type="email" className="form-control shadow-none" id="Username" onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" required />
+                    <label htmlFor="Username">Email address</label>
+                </div>
+                <div className="form-floating ">
+                    <input type={hide ? "password" : "text"} className="form-control shadow-none" id="Password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" required >
+                    </input>
+                    <div class="mb-3 form-check m-1">
+                        <input type="checkbox" class="form-check-input shadow-none border-dark" id="exampleCheck1" onChange={(e) => setHide(!hide)} />
+                        <label class="form-check-label" for="exampleCheck1">Show Password</label>
                     </div>
-                    {error && <p className="text-danger">{error}</p>}
-                    <div className="form-floating mb-2 ">
-                        <input type="email" className="form-control shadow-none" id="Username" onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" required />
-                        <label htmlFor="Username">Email address</label>
+                    <label htmlFor="Password">Password</label>
+                </div>
+                <div className="mt-2 text-end">
+                    <Link className="text-primary" to="/forgot-Password">Forget Password</Link>
+                </div>
+                <button id="ContinueButton" type="submit" className="submit_btn btn btn-md btn-primary w-100 my-2 p-1"><b>Login</b></button>
+                <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
+                <div className='m-1 d-flex align-items-center justify-content-center'>
+                    <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
+                        <img className='m-1 p-0' alt='google' src={GoogleIcon} style={{ width: "30px", height: "30px" }} />
                     </div>
-                    <div className="form-floating ">
-                        <input type="password" className="form-control shadow-none" id="Password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-                        <label htmlFor="Password">Password</label>
+                    <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
+                        <img className='m-1 p-0' alt='facebook' src={FacebookIcon} style={{ width: "30px", height: "30px" }} />
                     </div>
-                    <div className="mt-2 text-end">
-                        <Link className="text-primary" to="/forgot-Password">Forget Password</Link>
+                    <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
+                        <img className='m-1 p-0' alt='linkedin' src={LinkedIcon} style={{ width: "30px", height: "30px" }} />
                     </div>
-                    <button id="ContinueButton" type="submit" className="submit_btn btn btn-md btn-primary w-100 my-2 p-1"><b>Login</b></button>
-                    <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
-                    <div className='m-1 d-flex align-items-center justify-content-center'>
-                        <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='google' src={GoogleIcon} style={{ width: "30px", height: "30px" }} />
-                        </div>
-                        <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='facebook' src={FacebookIcon} style={{ width: "30px", height: "30px" }} />
-                        </div>
-                        <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='linkedin' src={LinkedIcon} style={{ width: "30px", height: "30px" }} />
-                        </div>
-                    </div>
-                </form>
-            </section>
+                </div>
+            </form>
         </>
     );
 }

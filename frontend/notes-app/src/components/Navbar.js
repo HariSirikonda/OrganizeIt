@@ -4,7 +4,7 @@ import Search from '../assets/search.png';
 import Remove from '../assets/remove.png';
 import User from '../assets/user.png';
 
-function Navbar({ UserInformation, loggedInState }) {
+function Navbar({ UserInformation, loggedInState, showLR, showSearch, showProfile }) {
     const [search, setSearch] = useState('');
     const [profileClick, setProfileClick] = useState(false);
     const handleProfileClick = () => setProfileClick(!profileClick);
@@ -41,29 +41,33 @@ function Navbar({ UserInformation, loggedInState }) {
                                 </li>
                             </ul>
                         </div>
-                        <div className='d-flex bg-white rounded w-50 shadow-sm'>
-                            <input className='form-control border-0 shadow-none rounded py-1' placeholder='Search notes' type='text' style={{ fontSize: '0.9rem' }} value={search} onChange={(e) => setSearch(e.target.value)} />
-                            {search &&
-                                <button className='btn shadow-none bg-white border-0 rounded-circle' onClick={(e) => setSearch('')}>
-                                    <img className='m-1' src={Remove} alt='show me' style={{ width: '15px', height: '15px' }}></img>
-                                </button>
-                            }
-                            <img className='m-1 p-1' src={Search} alt='show me' style={{ width: '28px', height: '28px' }}></img>
-                        </div>
-                        {loggedInState &&
-                            <div className='d-flex w-25 justify-content-end'>
-                                <div className='m-1'>
-                                    <button className="btn btn-sm bg-white" onClick={handleLogin}><b>Login</b></button>
-                                </div>
-                                <div className='m-1'>
-                                    <button className="btn btn-sm bg-white" onClick={handleSignUp}><b>Register</b></button>
-                                </div>
+                        {showSearch &&
+                            <div className='d-flex bg-white rounded w-50 shadow-sm'>
+                                <input className='form-control border-0 shadow-none rounded py-1' placeholder='Search notes' type='text' style={{ fontSize: '0.9rem' }} value={search} onChange={(e) => setSearch(e.target.value)} />
+                                {search &&
+                                    <button className='btn shadow-none bg-white border-0 rounded-circle' onClick={(e) => setSearch('')}>
+                                        <img className='m-1' src={Remove} alt='show me' style={{ width: '15px', height: '15px' }}></img>
+                                    </button>
+                                }
+                                <img className='m-1 p-1' src={Search} alt='show me' style={{ width: '28px', height: '28px' }}></img>
                             </div>
                         }
                         <div className='d-flex w-25 justify-content-end'>
-                            <button className='bg-white border-0 rounded-circle m-1' style={{ width: '32px', height: '32px' }} onClick={handleProfileClick}>
-                                <img className='img-fluid' src={User} alt='show me'></img>
-                            </button>
+                            {showLR &&
+                                <div className='d-flex w-25 justify-content-end'>
+                                    <div className='m-1'>
+                                        <button className="btn btn-sm bg-white" onClick={handleLogin}><b>Login</b></button>
+                                    </div>
+                                    <div className='m-1'>
+                                        <button className="btn btn-sm bg-white" onClick={handleSignUp}><b>Register</b></button>
+                                    </div>
+                                </div>
+                            }
+                            {showProfile &&
+                                <button className='bg-white border-0 rounded-circle m-1' style={{ width: '32px', height: '32px' }} onClick={handleProfileClick}>
+                                    <img className='img-fluid' src={User} alt='show me'></img>
+                                </button>
+                            }
                         </div>
                     </div>
                     {profileClick &&

@@ -8,7 +8,7 @@ import axiosInstance from '../utils/axiosInstance';
 
 function Notespage() {
     const [userInfo, setUserInfo] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
     const navigate = useNavigate();
     const getUserInfo = async () => {
         try {
@@ -64,6 +64,12 @@ function Notespage() {
             date: "14-04-2025",
             discription: "Buy a gift and plan surprise for friend",
             status: "Pending"
+        },
+        {
+            title: "Birthday Reminder",
+            date: "14-04-2025",
+            discription: "Buy a gift and plan surprise for friend",
+            status: "Pending"
         }
     ];
 
@@ -71,7 +77,7 @@ function Notespage() {
 
     return (
         <div>
-            <Navbar UserInformation={userInfo} loggedInState={isLoggedIn} />
+            <Navbar UserInformation={userInfo} showSearch={true} showLR={!isLoggedIn} showProfile={true} />
             <div className="container webkit-scrollbar">
                 <div className="row">
                     {notesData.map((note, index) => (
