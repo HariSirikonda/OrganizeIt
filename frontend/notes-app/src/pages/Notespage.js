@@ -36,14 +36,27 @@ function Notespage() {
                 }
             );
             if (!response.data.error) {
-                alert("Note added successfully");
                 setTitle("");
                 setDescription("");
+                setAddNote(!addNote);
+                await fetchNotes();
+                alert("Note added successfully");
             } else {
                 alert(response.data.message);
             }
         } catch (err) {
             alert("Error adding note");
+        }
+    };
+    const deleteNote = async (noteId) => {
+        console.log(noteId);
+        try {
+            const response = await axiosInstance.delete(`/delete-note/${noteId}`);
+            console.log(response.data.message);
+            await fetchNotes();
+            alert("Notes Deleted Successfully.")
+        } catch (error) {
+            console.error(error.response?.data?.message || "Something went wrong");
         }
     };
 
@@ -61,29 +74,29 @@ function Notespage() {
             }
         }
     };
-    useEffect(() => {
-        getUserInfo()
-        return () => { };
-    },)
 
-    useEffect(() => {
-        const fetchNotes = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axiosInstance.get('http://localhost:5000/get-all-notes', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+    const fetchNotes = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axiosInstance.get('/get-all-notes', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-                if (!response.data.error) {
-                    setNotes(response.data.notes);
-                }
-            } catch (error) {
-                console.error("Error fetching notes:", error);
+            if (!response.data.error) {
+                setNotes(response.data.notes);
             }
-        };
+        } catch (error) {
+            console.error("Error fetching notes:", error);
+        }
+    };
 
+    useEffect(() => {
+        getUserInfo();
+    });
+
+    useEffect(() => {
         fetchNotes();
     }, []);
 
@@ -106,17 +119,25 @@ function Notespage() {
             </div>
             <div className="container webkit-scrollbar">
                 <div className="row">
-                    {notes.map((note, index) => (
-                        <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
-                            <Notes
-                                title={note.title}
-                                date={note.createdAt.slice(0, 10)}
-                                description={note.description}
-                                status={note.status}
-                                pinnedprop={note.isPinned}
-                            />
-                        </div>
-                    ))}
+                    {notes
+                        .filter((note) => {
+                            if (filterOption === "Pinned") return note.isPinned === true;
+                            if (filterOption === "Unpinned") return note.isPinned === false;
+                            return true;
+                        })
+                        .map((note, index) => (
+                            <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
+                                <Notes
+                                    title={note.title}
+                                    date={note.createdAt.slice(0, 10)}
+                                    description={note.description}
+                                    status={note.status}
+                                    pinnedprop={note.isPinned}
+                                    deleteNote={deleteNote}
+                                    id={note._id}
+                                />
+                            </div>
+                        ))}
                 </div>
             </div>
             {addNote && (
@@ -144,7 +165,7 @@ function Notespage() {
                                     value={status}
                                     onChange={(e) => { setStatus(e.target.value) }}
                                 >
-                                    <option selected value="Pending">Pending</option>
+                                    <option value="Pending">Pending</option>
                                     <option value="In Progress">In Progress</option>
                                     <option value="Done">Done</option>
                                 </select>
