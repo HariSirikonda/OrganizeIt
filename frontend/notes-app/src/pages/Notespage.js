@@ -33,60 +33,84 @@ function Notespage() {
             title: "This is the title",
             date: "09-04-2025",
             discription: "This is the discription of the notes",
-            status: "Done"
+            status: "Done",
+            isPinned: true
         },
         {
             title: "Meeting Notes",
             date: "10-04-2025",
             discription: "Discuss project milestones and deliverables",
-            status: "In Progress"
+            status: "In Progress",
+            isPinned: true
         },
         {
             title: "Grocery List",
             date: "11-04-2025",
             discription: "Milk, eggs, bread, coffee, fruits",
-            status: "Pending"
+            status: "Pending",
+            isPinned: false
         },
         {
             title: "Workout Plan",
             date: "12-04-2025",
             discription: "Upper body workout and cardio session",
-            status: "Done"
+            status: "Done",
+            isPinned: true
         },
         {
             title: "Study Schedule",
             date: "13-04-2025",
             discription: "Revise DSA and React topics",
-            status: "Done"
+            status: "Done",
+            isPinned: false
         },
         {
             title: "Birthday Reminder",
             date: "14-04-2025",
             discription: "Buy a gift and plan surprise for friend",
-            status: "Pending"
-        },
-        {
-            title: "Birthday Reminder",
-            date: "14-04-2025",
-            discription: "Buy a gift and plan surprise for friend",
-            status: "Pending"
+            status: "Pending",
+            isPinned: true
         }
     ];
 
+
     const [addNote, setAddNote] = useState(false);
+    const [filterOption, setFilterOption] = useState("Filter");
+    const FilteredNotes = notesData.filter(note => {
+        if (filterOption === "Pinned") return note.isPinned;
+        if (filterOption === "Unpinned") return !note.isPinned;
+        return true;
+    });
 
     return (
         <div>
             <Navbar UserInformation={userInfo} showSearch={true} showLR={!isLoggedIn} showProfile={true} />
+            <div className='container d-flex justify-content-between align-items-center p-3 mb-2'>
+                <h1 className='bottom-border'>All Notes</h1>
+                <select
+                    className="form-select shadow-none border-dark"
+                    style={{ width: "170px" }}
+                    aria-label="Default select example"
+                    value={filterOption}
+                    onChange={(e) => { setFilterOption(e.target.value) }}
+                >
+                    <option selected>Filter</option>
+                    <option value="Pinned">Pinned</option>
+                    <option value="Unpinned">Unpinned</option>
+                </select>
+            </div>
+            <div className='container-fluid mb-2'>
+            </div>
             <div className="container webkit-scrollbar">
                 <div className="row">
-                    {notesData.map((note, index) => (
+                    {FilteredNotes.map((note, index) => (
                         <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
                             <Notes
                                 title={note.title}
                                 date={note.date}
                                 discription={note.discription}
                                 status={note.status}
+                                pinnedprop={note.isPinned}
                             />
                         </div>
                     ))}

@@ -7,6 +7,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import profile from './pages/profile';
 import Notespage from './pages/Notespage';
 import LoginPage from './pages/LoginPage';
+import AnalyticsPage from './pages/Analytics';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path='/signup' Component={SignUp} />
           <Route path='/notes' Component={Notespage} />
           <Route path='/profile' Component={profile} />
+          <Route path='/analytics' Component={AnalyticsPage} />
           <Route path='/forgot-password' Component={ForgotPassword} />
         </Routes>
       </BrowserRouter>

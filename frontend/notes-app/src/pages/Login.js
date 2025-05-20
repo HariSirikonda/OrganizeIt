@@ -3,7 +3,6 @@ import GoogleIcon from '../assets/google.png';
 import LinkedIcon from '../assets/linkedin.png';
 import FacebookIcon from '../assets/facebook.png';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import axiosInstance from '../utils/axiosInstance';
 
 function Login() {

@@ -12,9 +12,11 @@ const PORT = 5000;
 
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
+const { urlencoded } = require("body-parser");
 // Middleware
 app.use(cors());
 app.use(express.json()); // required to parse JSON body
+app.use(urlencoded({ extended: true }));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -36,6 +38,7 @@ app.post("/create-account", async (req, res) => {
     if (!fullName || !email || !password) {
         return res.status(400).json({ error: true, message: "All fields are required" });
     }
+
 
     const isUser = await User.findOne({ email });
     if (isUser) {
@@ -274,6 +277,6 @@ app.put("/update-note/:noteId", authenticateToken, async (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

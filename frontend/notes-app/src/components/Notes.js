@@ -4,8 +4,8 @@ import Delete from '../assets/delete.png';
 import Pin from '../assets/pin.png';
 import Pinned from '../assets/pinned.png';
 
-function Notes({ title, date, discription, status }) {
-    const [pinned, setPinned] = useState(true);
+function Notes({ title, date, discription, status, pinnedprop }) {
+    const [pinned, setPinned] = useState(pinnedprop);
     return (
         <div>
             <div className='box rounded shadow p-2 mt-1 mb-3' style={{ width: '420px' }}>

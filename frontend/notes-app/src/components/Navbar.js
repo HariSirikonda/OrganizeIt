@@ -21,9 +21,9 @@ function Navbar({ UserInformation, loggedInState, showLR, showSearch, showProfil
         e.preventDefault();
         navigate('/profile')
     }
-    const onLogout = (e) => {
-        navigate('/login');
+    const onLogout = () => {
         localStorage.clear();
+        navigate('/login');
     }
     return (
         <div>
@@ -38,6 +38,9 @@ function Navbar({ UserInformation, loggedInState, showLR, showSearch, showProfil
                                 </li>
                                 <li class="nav-item">
                                     <Link class="nav-link text-white active" to='/notes'>My Notes</Link>
+                                </li>
+                                <li class="nav-item">
+                                    <Link class="nav-link text-white active" to='/analytics'>Analytics</Link>
                                 </li>
                             </ul>
                         </div>
