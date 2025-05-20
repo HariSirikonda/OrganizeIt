@@ -14,24 +14,7 @@ function Home() {
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
     const [isGetStarted, setIsGetStarted] = useState(null);
     const navigate = useNavigate();
-    const getUserInfo = async () => {
-        try {
-            const response = await axiosInstance.get("/get-user");
-            if (response.data && response.data.user) {
-                setUserInfo(response.data.user);
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                localStorage.clear();
-                navigate('/login');
-                setIsLoggedIn(true);
-            }
-        }
-    };
-    useEffect(() => {
-        getUserInfo()
-        return () => { };
-    },)
+
     const handleGetStarted = () => {
         navigate('/signup');
     };
@@ -42,7 +25,7 @@ function Home() {
 
     return (
         <div>
-            <Navbar UserInformation={userInfo} showSearch={true} showLR={!isLoggedIn} showProfile={true} />
+            <Navbar UserInformation={userInfo} showSearch={true} showProfile={true} />
             <section className='m-0 border'>
                 <div className='d-flex container pt-5 align-items-center justify-content-start'>
                     <div className='p-2 w-50 me-2'>

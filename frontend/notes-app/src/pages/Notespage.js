@@ -9,7 +9,44 @@ import axiosInstance from '../utils/axiosInstance';
 function Notespage() {
     const [userInfo, setUserInfo] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
+    const [addNote, setAddNote] = useState(false);
+    const [filterOption, setFilterOption] = useState("Filter");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [status, setStatus] = useState("Pending");
+    const [notes, setNotes] = useState([]);
     const navigate = useNavigate();
+
+    const handleAddNote = async (e) => {
+        e.preventDefault();
+
+        if (!title || !description) {
+            alert("Change Title and Description.");
+            return;
+        }
+
+        try {
+            const response = await axiosInstance.post(
+                "/add-note",
+                { title, description, status },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+            if (!response.data.error) {
+                alert("Note added successfully");
+                setTitle("");
+                setDescription("");
+            } else {
+                alert(response.data.message);
+            }
+        } catch (err) {
+            alert("Error adding note");
+        }
+    };
+
     const getUserInfo = async () => {
         try {
             const response = await axiosInstance.get("/get-user");
@@ -28,59 +65,27 @@ function Notespage() {
         getUserInfo()
         return () => { };
     },)
-    const notesData = [
-        {
-            title: "This is the title",
-            date: "09-04-2025",
-            discription: "This is the discription of the notes",
-            status: "Done",
-            isPinned: true
-        },
-        {
-            title: "Meeting Notes",
-            date: "10-04-2025",
-            discription: "Discuss project milestones and deliverables",
-            status: "In Progress",
-            isPinned: true
-        },
-        {
-            title: "Grocery List",
-            date: "11-04-2025",
-            discription: "Milk, eggs, bread, coffee, fruits",
-            status: "Pending",
-            isPinned: false
-        },
-        {
-            title: "Workout Plan",
-            date: "12-04-2025",
-            discription: "Upper body workout and cardio session",
-            status: "Done",
-            isPinned: true
-        },
-        {
-            title: "Study Schedule",
-            date: "13-04-2025",
-            discription: "Revise DSA and React topics",
-            status: "Done",
-            isPinned: false
-        },
-        {
-            title: "Birthday Reminder",
-            date: "14-04-2025",
-            discription: "Buy a gift and plan surprise for friend",
-            status: "Pending",
-            isPinned: true
-        }
-    ];
 
+    useEffect(() => {
+        const fetchNotes = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axiosInstance.get('http://localhost:5000/get-all-notes', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
 
-    const [addNote, setAddNote] = useState(false);
-    const [filterOption, setFilterOption] = useState("Filter");
-    const FilteredNotes = notesData.filter(note => {
-        if (filterOption === "Pinned") return note.isPinned;
-        if (filterOption === "Unpinned") return !note.isPinned;
-        return true;
-    });
+                if (!response.data.error) {
+                    setNotes(response.data.notes);
+                }
+            } catch (error) {
+                console.error("Error fetching notes:", error);
+            }
+        };
+
+        fetchNotes();
+    }, []);
 
     return (
         <div>
@@ -99,16 +104,14 @@ function Notespage() {
                     <option value="Unpinned">Unpinned</option>
                 </select>
             </div>
-            <div className='container-fluid mb-2'>
-            </div>
             <div className="container webkit-scrollbar">
                 <div className="row">
-                    {FilteredNotes.map((note, index) => (
+                    {notes.map((note, index) => (
                         <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
                             <Notes
                                 title={note.title}
-                                date={note.date}
-                                discription={note.discription}
+                                date={note.createdAt.slice(0, 10)}
+                                description={note.description}
                                 status={note.status}
                                 pinnedprop={note.isPinned}
                             />
@@ -116,7 +119,6 @@ function Notespage() {
                     ))}
                 </div>
             </div>
-
             {addNote && (
                 <div className='notes-form bg-light' style={{ width: '1000px', height: '500px' }}>
                     <div className='d-flex align-items-end justify-content-end'>
@@ -124,11 +126,11 @@ function Notespage() {
                     </div>
                     <div className='p-2 mb-1'>
                         <h5>Title of the Notes</h5>
-                        <input className='form-control shadow-none' type='text' placeholder='Write your title here' required />
+                        <input className='form-control shadow-none' onChange={(e) => { setTitle(e.target.value) }} type='text' placeholder='Write your title here' required />
                     </div>
                     <div className='p-2 mb-1'>
                         <h5>Description</h5>
-                        <textarea className='form-control shadow-none' style={{ height: '150px' }} placeholder='Write your description here' required></textarea>
+                        <textarea className='form-control shadow-none' onChange={(e) => { setDescription(e.target.value) }} style={{ height: '150px' }} placeholder='Write your description here' required></textarea>
                     </div>
                     <div className='d-flex p-2 mb-1 align-items-center'>
                         <div className='d-flex w-50 align-items-center justify-content-start mx-1'>
@@ -136,20 +138,22 @@ function Notespage() {
                                 <h5 className='m-0'>Current Status:</h5>
                             </div>
                             <div className="btn-group p-1" role="group" aria-label="Basic radio toggle button group">
-                                <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autoComplete="off" defaultChecked />
-                                <label className="btn-sm btn-outline-primary shadow-none" htmlFor="btnradio1">Pending</label>
-
-                                <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" />
-                                <label className="btn-sm btn-outline-primary shadow-none" htmlFor="btnradio2">In Progress</label>
-
-                                <input type="radio" className="btn-check" name="btnradio" id="btnradio3" autoComplete="off" />
-                                <label className="btn-sm btn-outline-primary shadow-none" htmlFor="btnradio3">Done</label>
+                                <select
+                                    className="form-select border-dark text-decoration shadow-none"
+                                    aria-label="Default select example"
+                                    value={status}
+                                    onChange={(e) => { setStatus(e.target.value) }}
+                                >
+                                    <option selected value="Pending">Pending</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Done">Done</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div className='d-flex align-items-end justify-content-end mt-2 mb-0'>
                         <div>
-                            <button className='btn btn-sm btn-primary shadow-none mx-1'>Save</button>
+                            <button className='btn btn-sm btn-primary shadow-none mx-1' onClick={handleAddNote}>Save</button>
                             <button className='btn btn-sm btn-light shadow-none mx-1' onClick={() => setAddNote(false)}>Cancel</button>
                         </div>
                     </div>

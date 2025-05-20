@@ -4,7 +4,7 @@ import Delete from '../assets/delete.png';
 import Pin from '../assets/pin.png';
 import Pinned from '../assets/pinned.png';
 
-function Notes({ title, date, discription, status, pinnedprop }) {
+function Notes({ title, date, description, status, pinnedprop }) {
     const [pinned, setPinned] = useState(pinnedprop);
     return (
         <div>
@@ -38,7 +38,7 @@ function Notes({ title, date, discription, status, pinnedprop }) {
                     <span className='text-start rounded px-1 fs-8'>{date}</span>
                 </div>
                 <div className='m-1 pt-2 pb-2'>
-                    {discription}
+                    {description}
                 </div>
                 <div className="d-flex justify-content-end">
                     <button className='btn shadow-sm' onClick={() => { setPinned(!pinned) }}>

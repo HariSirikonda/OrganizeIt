@@ -1,14 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Search from '../assets/search.png';
 import Remove from '../assets/remove.png';
 import User from '../assets/user.png';
+import axiosInstance from '../utils/axiosInstance';
 
-function Navbar({ UserInformation, loggedInState, showLR, showSearch, showProfile }) {
+function Navbar({ showSearch, showProfile }) {
     const [search, setSearch] = useState('');
+    const [userInfo, setUserInfo] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
     const [profileClick, setProfileClick] = useState(false);
-    const handleProfileClick = () => setProfileClick(!profileClick);
+
     const navigate = useNavigate()
+    const getUserInfo = async () => {
+        try {
+            const response = await axiosInstance.get("/get-user");
+            if (response.data && response.data.user) {
+                setUserInfo(response.data.user);
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                localStorage.clear();
+                navigate('/login');
+                setIsLoggedIn(true);
+            }
+        }
+    };
+    const handleProfileClick = () => {
+        if (!isLoggedIn) {
+            alert("Please login to see your profile.");
+            return;
+        }
+        setProfileClick(!profileClick);
+    };
+    useEffect(() => {
+        getUserInfo();
+    }, []);
+
     const handleLogin = (e) => {
         e.preventDefault();
         navigate('/login');
@@ -56,7 +84,7 @@ function Navbar({ UserInformation, loggedInState, showLR, showSearch, showProfil
                             </div>
                         }
                         <div className='d-flex w-25 justify-content-end'>
-                            {showLR &&
+                            {!isLoggedIn &&
                                 <div className='d-flex w-25 justify-content-end'>
                                     <div className='m-1'>
                                         <button className="btn btn-sm bg-white" onClick={handleLogin}><b>Login</b></button>
@@ -73,16 +101,16 @@ function Navbar({ UserInformation, loggedInState, showLR, showSearch, showProfil
                             }
                         </div>
                     </div>
-                    {profileClick &&
+                    {profileClick && isLoggedIn && (
                         <div className='profile-dropdown border'>
-                            <p className='text-dark fw-bold text-center'>{UserInformation.fullName}</p>
+                            <p className='text-dark fw-bold text-center'>{userInfo?.fullName}</p>
                             <button className='btn form-control text-start shadow-none' onClick={handleEditProfile}>Edit Profile</button>
                             <button className='btn form-control text-start shadow-none'>Settings & Profile</button>
                             <button className='btn form-control text-start shadow-none'>Help & Support</button>
                             <button className='btn form-control text-start shadow-none'>Display & Accessibility</button>
                             <button className='btn form-control text-start shadow-none text-danger' onClick={onLogout}>Logout</button>
                         </div>
-                    }
+                    )}
                 </div>
             </nav>
         </div>

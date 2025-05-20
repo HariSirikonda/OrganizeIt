@@ -10,7 +10,7 @@ const noteSchema = new Schema({
         default: "Pending"
     },
     createdAt: { type: Date, default: Date.now },
-    pinned: { type: Boolean, default: false },
+    isPinned: { type: Boolean, default: false },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" } // optional: link to user
 });
 
