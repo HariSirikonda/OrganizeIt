@@ -1,31 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../utils/axiosInstance';
 import HomeImg from '../assets/notesLady.png';
 import ImgCard1 from '../assets/allinone.avif';
 import ImgCard2 from '../assets/workflow.avif';
 import ImgCard3 from '../assets/usersupport.avif';
 import ImgCard4 from '../assets/smarttools.avif';
-import Login from './Login';
 
 function Home() {
-    const [userInfo, setUserInfo] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
-    const [isGetStarted, setIsGetStarted] = useState(null);
+    const [isLoggedIn] = useState(localStorage.getItem('token'));
     const navigate = useNavigate();
 
     const handleGetStarted = () => {
         navigate('/signup');
     };
-    // useEffect(() => {
-    //     getUserInfo()
-    //     return () => { };
-    // }, [userInfo])
 
     return (
         <div>
-            <Navbar UserInformation={userInfo} showSearch={true} showProfile={true} />
+            <Navbar showSearch={true} showProfile={true} />
             <section className='m-0 border'>
                 <div className='d-flex container pt-5 align-items-center justify-content-start'>
                     <div className='p-2 w-50 me-2'>

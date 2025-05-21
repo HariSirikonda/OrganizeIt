@@ -3,19 +3,19 @@ import Navbar from '../components/Navbar';
 import Notes from '../components/Notes';
 import PlusIcon from '../assets/plus.png';
 import CloseIcon from '../assets/remove.png';
-import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 
+
 function Notespage() {
-    const [userInfo, setUserInfo] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
+    const [isLoggedIn] = useState(localStorage.getItem('token'));
     const [addNote, setAddNote] = useState(false);
     const [filterOption, setFilterOption] = useState("Filter");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("Pending");
     const [notes, setNotes] = useState([]);
-    const navigate = useNavigate();
+    const [showConfirm, setShowConfirm] = useState();
+    const [noteId, setNoteId] = useState("");
 
     const handleAddNote = async (e) => {
         e.preventDefault();
@@ -40,7 +40,6 @@ function Notespage() {
                 setDescription("");
                 setAddNote(!addNote);
                 await fetchNotes();
-                alert("Note added successfully");
             } else {
                 alert(response.data.message);
             }
@@ -48,32 +47,24 @@ function Notespage() {
             alert("Error adding note");
         }
     };
-    const deleteNote = async (noteId) => {
-        console.log(noteId);
+    const deleteNote = async (ID) => {
         try {
-            const response = await axiosInstance.delete(`/delete-note/${noteId}`);
+            const response = await axiosInstance.delete(`/delete-note/${ID}`);
+            setShowConfirm(false);
             console.log(response.data.message);
             await fetchNotes();
-            alert("Notes Deleted Successfully.")
+            setNoteId("");
+
         } catch (error) {
+            alert("Problem Deleting the note..!");
             console.error(error.response?.data?.message || "Something went wrong");
         }
     };
 
-    const getUserInfo = async () => {
-        try {
-            const response = await axiosInstance.get("/get-user");
-            if (response.data && response.data.user) {
-                setUserInfo(response.data.user);
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                localStorage.clear();
-                navigate('/login');
-                setIsLoggedIn(true);
-            }
-        }
-    };
+    const handleConfirm = (notesId) => {
+        setNoteId(notesId);
+        setShowConfirm(true);
+    }
 
     const fetchNotes = async () => {
         try {
@@ -93,16 +84,31 @@ function Notespage() {
     };
 
     useEffect(() => {
-        getUserInfo();
-    });
-
-    useEffect(() => {
         fetchNotes();
     }, []);
 
     return (
         <div>
-            <Navbar UserInformation={userInfo} showSearch={true} showLR={!isLoggedIn} showProfile={true} />
+            <Navbar showSearch={true} showLR={!isLoggedIn} showProfile={true} />
+            {showConfirm && (
+                <div className="alert alert-danger border-0 shadow-sm text-dark slide-down confirm-delete d-flex align-items-center jusrify-content-center" role="alert" style={{ width: "450px", height: "60px" }}>
+                    <span className='mx-3'>Are you sure, want to delete ?</span>
+                    <button
+                        type="button"
+                        className="btn m-1 text-decoration shadow-none btn-danger"
+                        onClick={() => { deleteNote(noteId) }}
+                    >
+                        Delete
+                    </button>
+                    <button
+                        type="button"
+                        className="btn m-1 text-decoration shadow-none btn-light"
+                        onClick={() => { setShowConfirm(false) }}
+                    >
+                        cancel
+                    </button>
+                </div>
+            )}
             <div className='container d-flex justify-content-between align-items-center p-3 mb-2'>
                 <h1 className='bottom-border'>All Notes</h1>
                 <select
@@ -133,7 +139,7 @@ function Notespage() {
                                     description={note.description}
                                     status={note.status}
                                     pinnedprop={note.isPinned}
-                                    deleteNote={deleteNote}
+                                    handleConfirm={handleConfirm}
                                     id={note._id}
                                 />
                             </div>

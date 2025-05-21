@@ -8,6 +8,7 @@ import profile from './pages/profile';
 import Notespage from './pages/Notespage';
 import LoginPage from './pages/LoginPage';
 import AnalyticsPage from './pages/Analytics';
+import Navbar from './components/Navbar';
 
 function App() {
   return (

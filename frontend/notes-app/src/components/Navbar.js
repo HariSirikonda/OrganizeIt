@@ -10,8 +10,8 @@ function Navbar({ showSearch, showProfile }) {
     const [userInfo, setUserInfo] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
     const [profileClick, setProfileClick] = useState(false);
-
     const navigate = useNavigate()
+
     const getUserInfo = async () => {
         try {
             const response = await axiosInstance.get("/get-user");
@@ -26,6 +26,7 @@ function Navbar({ showSearch, showProfile }) {
             }
         }
     };
+
     const handleProfileClick = () => {
         if (!isLoggedIn) {
             alert("Please login to see your profile.");
@@ -33,6 +34,7 @@ function Navbar({ showSearch, showProfile }) {
         }
         setProfileClick(!profileClick);
     };
+
     useEffect(() => {
         getUserInfo();
     }, []);
@@ -41,18 +43,22 @@ function Navbar({ showSearch, showProfile }) {
         e.preventDefault();
         navigate('/login');
     };
+
     const handleSignUp = (e) => {
         e.preventDefault();
         navigate('/signup');
     };
+
     const handleEditProfile = (e) => {
         e.preventDefault();
         navigate('/profile')
     }
+
     const onLogout = () => {
         localStorage.clear();
         navigate('/login');
     }
+
     return (
         <div>
             <nav class="navbar nav-color navbar-expand-lg">

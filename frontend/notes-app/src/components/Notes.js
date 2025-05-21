@@ -3,12 +3,9 @@ import Edit from '../assets/edit.png';
 import Delete from '../assets/delete.png';
 import Pin from '../assets/pin.png';
 import Pinned from '../assets/pinned.png';
-import axiosInstance from '../utils/axiosInstance';
-import { useNavigate } from 'react-router-dom';
 
-function Notes({ id, title, date, description, status, pinnedprop, deleteNote }) {
+function Notes({ id, title, date, description, status, pinnedprop, handleConfirm }) {
     const [pinned, setPinned] = useState(pinnedprop);
-    const navigate = useNavigate();
 
     return (
         <div>
@@ -21,8 +18,8 @@ function Notes({ id, title, date, description, status, pinnedprop, deleteNote })
                         <button className='btn shadow-sm'>
                             <img src={Edit} alt='edit' style={{ width: '20px', height: '20px' }} />
                         </button>
-                        <button className='btn shadow-sm'>
-                            <img src={Delete} alt='edit' onClick={() => deleteNote(id)} style={{ width: '20px', height: '20px' }} />
+                        <button className='btn shadow-sm' onClick={() => handleConfirm(id)}>
+                            <img src={Delete} alt='edit' style={{ width: '20px', height: '20px' }} />
                         </button>
                         <div className='ps-2 mt-1 text-dark'>
                             <span
