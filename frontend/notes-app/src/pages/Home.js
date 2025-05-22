@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Navbar from '../components/Navbar'
 import { useNavigate } from 'react-router-dom';
 import HomeImg from '../assets/notesLady.png';
@@ -8,7 +8,7 @@ import ImgCard3 from '../assets/usersupport.avif';
 import ImgCard4 from '../assets/smarttools.avif';
 
 function Home() {
-    const [isLoggedIn] = useState(localStorage.getItem('token'));
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
     const navigate = useNavigate();
 
     const handleGetStarted = () => {

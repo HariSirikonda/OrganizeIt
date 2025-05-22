@@ -13,18 +13,16 @@ function Notespage() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("Pending");
-    const [notes, setNotes] = useState([]);
+    const [notes, setNotes] = useState([]); //All notes
     const [showConfirm, setShowConfirm] = useState();
     const [noteId, setNoteId] = useState("");
 
     const handleAddNote = async (e) => {
         e.preventDefault();
-
         if (!title || !description) {
             alert("Change Title and Description.");
             return;
         }
-
         try {
             const response = await axiosInstance.post(
                 "/add-note",
@@ -47,6 +45,7 @@ function Notespage() {
             alert("Error adding note");
         }
     };
+
     const deleteNote = async (ID) => {
         try {
             const response = await axiosInstance.delete(`/delete-note/${ID}`);
@@ -118,7 +117,7 @@ function Notespage() {
                     value={filterOption}
                     onChange={(e) => { setFilterOption(e.target.value) }}
                 >
-                    <option selected>Filter</option>
+                    <option selected value="All">All Notes</option>
                     <option value="Pinned">Pinned</option>
                     <option value="Unpinned">Unpinned</option>
                 </select>
@@ -138,7 +137,7 @@ function Notespage() {
                                     date={note.createdAt.slice(0, 10)}
                                     description={note.description}
                                     status={note.status}
-                                    pinnedprop={note.isPinned}
+                                    isPinned={note.isPinned}
                                     handleConfirm={handleConfirm}
                                     id={note._id}
                                 />
@@ -180,7 +179,13 @@ function Notespage() {
                     </div>
                     <div className='d-flex align-items-end justify-content-end mt-2 mb-0'>
                         <div>
-                            <button className='btn btn-sm btn-primary shadow-none mx-1' onClick={handleAddNote}>Save</button>
+                            <button
+                                className='btn btn-sm btn-primary shadow-none mx-1'
+                                onClick={handleAddNote}
+                                disabled={!title.trim() || !description.trim()}
+                            >
+                                Save
+                            </button>
                             <button className='btn btn-sm btn-light shadow-none mx-1' onClick={() => setAddNote(false)}>Cancel</button>
                         </div>
                     </div>

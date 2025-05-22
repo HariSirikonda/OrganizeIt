@@ -1,11 +1,28 @@
 import React, { useState } from 'react';
 import Edit from '../assets/edit.png';
 import Delete from '../assets/delete.png';
-import Pin from '../assets/pin.png';
-import Pinned from '../assets/pinned.png';
+import PinImg from '../assets/pin.png';
+import PinnedImg from '../assets/pinned.png';
+import axiosInstance from '../utils/axiosInstance';
 
-function Notes({ id, title, date, description, status, pinnedprop, handleConfirm }) {
-    const [pinned, setPinned] = useState(pinnedprop);
+function Notes({ id, title, date, description, status, isPinned, handleConfirm, onTogglePin }) {
+
+    const [pinned, setPinned] = useState(isPinned);
+
+    const handleTogglePin = async () => {
+        const newPinned = !pinned;
+        setPinned(newPinned); // Update UI instantly
+
+        try {
+            const response = await axiosInstance.put(`/update-note/${id}`, {
+                pinned: newPinned
+            });
+            console.log("Pinned status updated:", response.data.message);
+        } catch (error) {
+            console.error("Failed to update pinned status:", error.response?.data?.message || error.message);
+            setPinned(!newPinned); // Revert UI if update failed
+        }
+    };
 
     return (
         <div>
@@ -42,8 +59,8 @@ function Notes({ id, title, date, description, status, pinnedprop, handleConfirm
                     {description}
                 </div>
                 <div className="d-flex justify-content-end">
-                    <button className='btn shadow-sm' onClick={() => { setPinned(!pinned) }}>
-                        <img src={pinned ? Pinned : Pin} alt='show me' style={{ width: "20px", height: "20px" }} />
+                    <button className='btn shadow-sm' onClick={handleTogglePin}>
+                        <img src={pinned ? PinnedImg : PinImg} alt='show me' style={{ width: "20px", height: "20px" }} />
                     </button>
                 </div>
             </div>

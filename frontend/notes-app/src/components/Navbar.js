@@ -56,7 +56,7 @@ function Navbar({ showSearch, showProfile }) {
 
     const onLogout = () => {
         localStorage.clear();
-        navigate('/login');
+        navigate('/home');
     }
 
     return (

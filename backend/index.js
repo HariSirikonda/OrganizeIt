@@ -257,7 +257,8 @@ app.put("/update-note/:noteId", authenticateToken, async (req, res) => {
             });
         }
 
-        if (pinned) note.pinned = pinned;
+        // if (pinned) note.isPinned = pinned;
+        if (typeof pinned === "boolean") note.isPinned = pinned;
 
         await note.save();
 
