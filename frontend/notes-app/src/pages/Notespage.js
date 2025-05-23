@@ -63,7 +63,11 @@ function Notespage() {
     const handleConfirm = (notesId) => {
         setNoteId(notesId);
         setShowConfirm(true);
-    }
+    };
+
+    const handleRevert = () => {
+        alert("Notes cannot be updated at this movement..!");
+    };
 
     const fetchNotes = async () => {
         try {
@@ -139,6 +143,7 @@ function Notespage() {
                                     status={note.status}
                                     isPinned={note.isPinned}
                                     handleConfirm={handleConfirm}
+                                    handleRevert={handleRevert}
                                     id={note._id}
                                 />
                             </div>

@@ -5,9 +5,13 @@ import PinImg from '../assets/pin.png';
 import PinnedImg from '../assets/pinned.png';
 import axiosInstance from '../utils/axiosInstance';
 
-function Notes({ id, title, date, description, status, isPinned, handleConfirm, onTogglePin }) {
+function Notes({ id, title, date, description, status, isPinned, handleConfirm, handleRevert }) {
 
     const [pinned, setPinned] = useState(isPinned);
+
+    const handleEditClick = () => {
+        console.log("Edit note clicked..! noteId", id);
+    }
 
     const handleTogglePin = async () => {
         const newPinned = !pinned;
@@ -20,6 +24,7 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirm, 
             console.log("Pinned status updated:", response.data.message);
         } catch (error) {
             console.error("Failed to update pinned status:", error.response?.data?.message || error.message);
+            handleRevert();
             setPinned(!newPinned); // Revert UI if update failed
         }
     };
@@ -32,7 +37,7 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirm, 
                         <h4 className='m-0'>{title}</h4>
                     </div>
                     <div className='d-flex align-items-center ms-auto'>
-                        <button className='btn shadow-sm'>
+                        <button className='btn shadow-sm' onClick={handleEditClick}>
                             <img src={Edit} alt='edit' style={{ width: '20px', height: '20px' }} />
                         </button>
                         <button className='btn shadow-sm' onClick={() => handleConfirm(id)}>
