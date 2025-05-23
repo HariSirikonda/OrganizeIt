@@ -4,11 +4,14 @@ import Notes from '../components/Notes';
 import PlusIcon from '../assets/plus.png';
 import CloseIcon from '../assets/remove.png';
 import axiosInstance from '../utils/axiosInstance';
+import Toast from '../components/Toast';
 
 
 function Notespage() {
     const [isLoggedIn] = useState(localStorage.getItem('token'));
     const [addNote, setAddNote] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editNoteId, setEditNoteId] = useState(null);
     const [filterOption, setFilterOption] = useState("Filter");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -19,31 +22,62 @@ function Notespage() {
 
     const handleAddNote = async (e) => {
         e.preventDefault();
-        if (!title || !description) {
-            alert("Change Title and Description.");
-            return;
-        }
+
         try {
-            const response = await axiosInstance.post(
-                "/add-note",
-                { title, description, status },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                }
-            );
-            if (!response.data.error) {
-                setTitle("");
-                setDescription("");
-                setAddNote(!addNote);
-                await fetchNotes();
-            } else {
-                alert(response.data.message);
+            if (!title || !description) {
+                alert("Please enter both title and description.");
+                return;
             }
+
+            if (isEditMode) {
+                const response = await axiosInstance.put(`/edit-note/${editNoteId}`, {
+                    title,
+                    description,
+                    status,
+                });
+
+                if (!response.data.error) {
+                    setIsEditMode(false);
+                    setEditNoteId(null);
+                } else {
+                    alert(response.data.message);
+                    return;
+                }
+            } else {
+                const response = await axiosInstance.post(
+                    "/add-note",
+                    { title, description, status },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    }
+                );
+
+                if (response.data.error) {
+                    alert(response.data.message);
+                    return;
+                }
+            }
+
+            setTitle("");
+            setDescription("");
+            setAddNote(false);
+            await fetchNotes();
+
         } catch (err) {
-            alert("Error adding note");
+            console.error(err);
+            alert("Something went wrong while saving the note.");
         }
+    };
+
+    const handleEdit = (note) => {
+        setTitle(note.title);
+        setDescription(note.description);
+        setStatus(note.status);
+        setEditNoteId(note._id);
+        setIsEditMode(true);
+        setAddNote(true);
     };
 
     const deleteNote = async (ID) => {
@@ -93,6 +127,7 @@ function Notespage() {
     return (
         <div>
             <Navbar showSearch={true} showLR={!isLoggedIn} showProfile={true} />
+            <Toast />
             {showConfirm && (
                 <div className="alert alert-danger border-0 shadow-sm text-dark slide-down confirm-delete d-flex align-items-center jusrify-content-center" role="alert" style={{ width: "450px", height: "60px" }}>
                     <span className='mx-3'>Are you sure, want to delete ?</span>
@@ -142,6 +177,7 @@ function Notespage() {
                                     description={note.description}
                                     status={note.status}
                                     isPinned={note.isPinned}
+                                    handleEdit={() => { handleEdit(note) }}
                                     handleConfirm={handleConfirm}
                                     handleRevert={handleRevert}
                                     id={note._id}
@@ -157,11 +193,24 @@ function Notespage() {
                     </div>
                     <div className='p-2 mb-1'>
                         <h5>Title of the Notes</h5>
-                        <input className='form-control shadow-none' onChange={(e) => { setTitle(e.target.value) }} type='text' placeholder='Write your title here' required />
+                        <input
+                            className='form-control shadow-none'
+                            value={title}
+                            onChange={(e) => { setTitle(e.target.value) }}
+                            type='text'
+                            placeholder='Write your title here'
+                            required
+                        />
                     </div>
                     <div className='p-2 mb-1'>
                         <h5>Description</h5>
-                        <textarea className='form-control shadow-none' onChange={(e) => { setDescription(e.target.value) }} style={{ height: '150px' }} placeholder='Write your description here' required></textarea>
+                        <textarea
+                            className='form-control shadow-none'
+                            value={description}
+                            onChange={(e) => { setDescription(e.target.value) }}
+                            style={{ height: '150px' }}
+                            placeholder='Write your description here'
+                            required></textarea>
                     </div>
                     <div className='d-flex p-2 mb-1 align-items-center'>
                         <div className='d-flex w-50 align-items-center justify-content-start mx-1'>
@@ -189,7 +238,7 @@ function Notespage() {
                                 onClick={handleAddNote}
                                 disabled={!title.trim() || !description.trim()}
                             >
-                                Save
+                                {isEditMode ? "Update" : "Save"}
                             </button>
                             <button className='btn btn-sm btn-light shadow-none mx-1' onClick={() => setAddNote(false)}>Cancel</button>
                         </div>

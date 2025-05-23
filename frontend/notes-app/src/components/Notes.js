@@ -5,13 +5,13 @@ import PinImg from '../assets/pin.png';
 import PinnedImg from '../assets/pinned.png';
 import axiosInstance from '../utils/axiosInstance';
 
-function Notes({ id, title, date, description, status, isPinned, handleConfirm, handleRevert }) {
+function Notes({ id, title, date, description, status, isPinned, handleConfirm, handleRevert, handleEdit }) {
 
     const [pinned, setPinned] = useState(isPinned);
 
-    const handleEditClick = () => {
-        console.log("Edit note clicked..! noteId", id);
-    }
+    // const handleEditClick = () => {
+    //     console.log("Edit note clicked..! noteId", id);
+    // }
 
     const handleTogglePin = async () => {
         const newPinned = !pinned;
@@ -37,7 +37,7 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirm, 
                         <h4 className='m-0'>{title}</h4>
                     </div>
                     <div className='d-flex align-items-center ms-auto'>
-                        <button className='btn shadow-sm' onClick={handleEditClick}>
+                        <button className='btn shadow-sm' onClick={handleEdit}>
                             <img src={Edit} alt='edit' style={{ width: '20px', height: '20px' }} />
                         </button>
                         <button className='btn shadow-sm' onClick={() => handleConfirm(id)}>
