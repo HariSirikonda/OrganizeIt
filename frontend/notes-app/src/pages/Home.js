@@ -19,7 +19,7 @@ function Home() {
         <div>
             <Navbar showSearch={true} showProfile={true} />
             {/* Hero Section */}
-            <section id='home' className='bg-white py-5 border-bottom'>
+            <section id='home' className='bg-white py-2 border-bottom'>
                 <div className='container d-flex flex-wrap align-items-center justify-content-between'>
                     <div className='p-3' style={{ maxWidth: '540px' }}>
                         <h1 className='fw-bold'>Communicate. Collaborate. <br />Create...</h1>
@@ -37,7 +37,7 @@ function Home() {
                             className='img-fluid'
                             src={HomeImg}
                             alt='OrganizeIt Hero'
-                            style={{ maxWidth: '500px', borderRadius: '1rem' }}
+                            style={{ maxWidth: '400px', borderRadius: '1rem' }}
                         />
                     </div>
                 </div>
@@ -88,22 +88,22 @@ function Home() {
             {/* Contact Section */}
             <section className='bg-white py-5 border-top'>
                 <div className='container'>
-                    <h2 className='text-center mb-4 fw-semibold'>Contact Us</h2>
-                    <p className='text-center mb-5 text-muted'>
+                    <h2 className='text-center mb-2 fw-semibold'>Contact Us</h2>
+                    <p className='text-center mb-2 text-muted'>
                         Have questions or suggestions? We'd love to hear from you!
                     </p>
                     <div className='row justify-content-center'>
                         <div className='col-md-8'>
                             <form>
-                                <div className='mb-3'>
+                                <div className='mb-2'>
                                     <label htmlFor='name' className='form-label'>Name</label>
                                     <input type='text' className='form-control' id='name' placeholder='Your Name' />
                                 </div>
-                                <div className='mb-3'>
+                                <div className='mb-2'>
                                     <label htmlFor='email' className='form-label'>Email</label>
                                     <input type='email' className='form-control' id='email' placeholder='you@example.com' />
                                 </div>
-                                <div className='mb-3'>
+                                <div className='mb-2'>
                                     <label htmlFor='message' className='form-label'>Message</label>
                                     <textarea className='form-control' id='message' rows='4' placeholder='Your message'></textarea>
                                 </div>
@@ -117,7 +117,7 @@ function Home() {
             </section>
 
             {/* Video Demo or Preview */}
-            <section className="container-fluid bg-white py-5 border-top">
+            <section className="container-fluid bg-white py-3 border-top">
                 <div className="container d-flex align-items-center justify-content-center flex-column">
                     <h2 className="mb-4">See It in Action</h2>
                     <div className="ratio ratio-16x9" style={{ maxWidth: '800px' }}>
