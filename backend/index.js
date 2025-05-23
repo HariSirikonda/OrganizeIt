@@ -86,8 +86,8 @@ app.post("/login", async (req, res) => {
             email,
             accessToken,
             user: {
-                _id: userInfo._id,      // ✅ added this
-                fullName: userInfo.fullName // optional
+                _id: userInfo._id,
+                fullName: userInfo.fullName
             }
         });
     } else {
