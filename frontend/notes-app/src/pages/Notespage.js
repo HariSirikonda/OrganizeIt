@@ -102,6 +102,19 @@ function Notespage() {
         alert("Notes cannot be updated at this movement..!");
     };
 
+    const handleTogglePin = async (id, newPinned) => {
+        try {
+            const response = await axiosInstance.put(`/update-note/${id}`, {
+                pinned: newPinned
+            });
+            console.log("Pinned status updated:", response.data.message);
+        } catch (error) {
+            console.error("Failed to update pinned status:", error.response?.data?.message || error.message);
+            handleRevert();
+            //Bug here to fix : we cannot revert the UI back to the notes component to show the unpin button
+        }
+    };
+
     const fetchNotes = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -176,6 +189,7 @@ function Notespage() {
                                     status={note.status}
                                     isPinned={note.isPinned}
                                     handleEdit={() => { handleEdit(note) }}
+                                    handleTogglePin={handleTogglePin}
                                     handleConfirm={handleConfirm}
                                     handleRevert={handleRevert}
                                     id={note._id}
