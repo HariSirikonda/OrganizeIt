@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { useNavigate } from 'react-router-dom';
 import HomeImg from '../assets/notesIllustration.png';
@@ -6,14 +6,16 @@ import ImgCard1 from '../assets/allinone.avif';
 import ImgCard2 from '../assets/workflow.avif';
 import ImgCard3 from '../assets/usersupport.avif';
 import ImgCard4 from '../assets/smarttools.avif';
+import axiosInstance from '../utils/axiosInstance';
 
 function Home() {
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
     const navigate = useNavigate();
-
     const handleGetStarted = () => {
         navigate('/signup');
     };
+
+
 
     return (
         <div>

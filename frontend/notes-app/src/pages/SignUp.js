@@ -29,7 +29,7 @@ function SignUp() {
             });
             if (response.data && !response.data.error && response.data.accessToken) {
                 localStorage.setItem("token", response.data.accessToken);
-                navigate("/home");
+                navigate("/login");
             } else {
                 setError(response.data.message || "Signup failed");
             }

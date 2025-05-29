@@ -7,10 +7,11 @@ import axiosInstance from '../utils/axiosInstance';
 
 function Navbar({ showSearch, showProfile, signUpLogin }) {
     const [search, setSearch] = useState('');
-    const [userInfo, setUserInfo] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
     const [profileClick, setProfileClick] = useState(false);
     const navigate = useNavigate()
+
+    const [userInfo, setUserInfo] = useState(null);
 
     const getUserInfo = async () => {
         try {
@@ -25,6 +26,10 @@ function Navbar({ showSearch, showProfile, signUpLogin }) {
         }
     };
 
+    useEffect(() => {
+        getUserInfo();
+    }, []);
+
     const handleProfileClick = () => {
         if (!isLoggedIn) {
             alert("Please login to see your profile.");
@@ -32,10 +37,6 @@ function Navbar({ showSearch, showProfile, signUpLogin }) {
         }
         setProfileClick(!profileClick);
     };
-
-    useEffect(() => {
-        getUserInfo();
-    }, []);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -54,7 +55,8 @@ function Navbar({ showSearch, showProfile, signUpLogin }) {
 
     const onLogout = (e) => {
         localStorage.clear();
-        navigate('/login');
+        navigate(0);
+        // navigate('/login');
     }
 
     return (
