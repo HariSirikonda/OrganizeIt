@@ -4,6 +4,7 @@ import Notes from '../components/Notes';
 import PlusIcon from '../assets/plus.png';
 import CloseIcon from '../assets/remove.png';
 import axiosInstance from '../utils/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 
 function Notespage() {
@@ -18,6 +19,7 @@ function Notespage() {
     const [notes, setNotes] = useState([]); //All notes
     const [showConfirm, setShowConfirm] = useState();
     const [noteId, setNoteId] = useState("");
+    const navigate = useNavigate();
 
     const handleAddNote = async (e) => {
         e.preventDefault();
@@ -98,6 +100,7 @@ function Notespage() {
         setShowConfirm(true);
     };
 
+
     const handleRevert = () => {
         alert("Notes cannot be updated at this movement..!");
     };
@@ -136,6 +139,10 @@ function Notespage() {
         fetchNotes();
     }, []);
 
+    const hanldeUpdateNotes = () => {
+        navigate(0);
+    };
+
     return (
         <div>
             <Navbar showSearch={true} showLR={!isLoggedIn} showProfile={true} />
@@ -159,18 +166,28 @@ function Notespage() {
                 </div>
             )}
             <div className='container d-flex justify-content-between align-items-center p-3 mb-2'>
-                <h1 className='bottom-border'>All Notes</h1>
-                <select
-                    className="form-select shadow-none border-dark"
-                    style={{ width: "170px" }}
-                    aria-label="Default select example"
-                    value={filterOption}
-                    onChange={(e) => { setFilterOption(e.target.value) }}
-                >
-                    <option selected value="All">All Notes</option>
-                    <option value="Pinned">Pinned</option>
-                    <option value="Unpinned">Unpinned</option>
-                </select>
+                <div>
+                    <h1 className='bottom-border'>All Notes</h1>
+                </div>
+                <div className='d-flex justify-content-between align-items-center'>
+                    <select
+                        className="form-select shadow-none border-dark mx-2"
+                        style={{ width: "170px" }}
+                        aria-label="Default select example"
+                        value={filterOption}
+                        onChange={(e) => { setFilterOption(e.target.value) }}
+                    >
+                        <option selected value="All">All Notes</option>
+                        <option value="Pinned">Pinned</option>
+                        <option value="Unpinned">Unpinned</option>
+                    </select>
+                    <button
+                        className='btn nav-color m-2 text-white'
+                        onClick={hanldeUpdateNotes}
+                    >
+                        Update
+                    </button>
+                </div>
             </div>
             <div className="container webkit-scrollbar">
                 {isLoggedIn ? (
