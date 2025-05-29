@@ -173,30 +173,32 @@ function Notespage() {
                 </select>
             </div>
             <div className="container webkit-scrollbar">
-                <div className="row">
-                    {notes
-                        .filter((note) => {
-                            if (filterOption === "Pinned") return note.isPinned === true;
-                            if (filterOption === "Unpinned") return note.isPinned === false;
-                            return true;
-                        })
-                        .map((note, index) => (
-                            <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
-                                <Notes
-                                    title={note.title}
-                                    date={note.createdAt.slice(0, 10)}
-                                    description={note.description}
-                                    status={note.status}
-                                    isPinned={note.isPinned}
-                                    handleEdit={() => { handleEdit(note) }}
-                                    handleTogglePin={handleTogglePin}
-                                    handleConfirm={handleConfirm}
-                                    handleRevert={handleRevert}
-                                    id={note._id}
-                                />
-                            </div>
-                        ))}
-                </div>
+                {isLoggedIn ? (
+                    <div className="row">
+                        {notes
+                            .filter((note) => {
+                                if (filterOption === "Pinned") return note.isPinned === true;
+                                if (filterOption === "Unpinned") return note.isPinned === false;
+                                return true;
+                            })
+                            .map((note, index) => (
+                                <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
+                                    <Notes
+                                        title={note.title}
+                                        date={note.createdAt.slice(0, 10)}
+                                        description={note.description}
+                                        status={note.status}
+                                        isPinned={note.isPinned}
+                                        handleEdit={() => { handleEdit(note) }}
+                                        handleTogglePin={handleTogglePin}
+                                        handleConfirm={handleConfirm}
+                                        handleRevert={handleRevert}
+                                        id={note._id}
+                                    />
+                                </div>
+                            ))}
+                    </div>
+                ) : ("Login to see the Notes")}
             </div>
             {addNote && (
                 <div className='notes-form bg-light' style={{ width: '1000px', height: '500px' }}>
