@@ -21,8 +21,6 @@ function Navbar({ showSearch, showProfile }) {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 localStorage.clear();
-                navigate('/login');
-                setIsLoggedIn(true);
             }
         }
     };
