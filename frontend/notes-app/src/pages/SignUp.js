@@ -39,6 +39,9 @@ function SignUp() {
     };
     return (
         <>
+            <div>
+                <Navbar signUpLogin={true} />
+            </div>
             <section className='container-fluid d-flex align-items-center justify-content-center p-3'>
                 <form className="rounded bg-white shadow p-4 m-2" style={{ width: '500px' }}>
                     <h3 className="text-dark fw-bolder fs-4 mt-1">OrganizeIt welcomes you</h3>

@@ -5,7 +5,7 @@ import Remove from '../assets/remove.png';
 import User from '../assets/user.png';
 import axiosInstance from '../utils/axiosInstance';
 
-function Navbar({ showSearch, showProfile }) {
+function Navbar({ showSearch, showProfile, signUpLogin }) {
     const [search, setSearch] = useState('');
     const [userInfo, setUserInfo] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
@@ -88,7 +88,7 @@ function Navbar({ showSearch, showProfile }) {
                             </div>
                         }
                         <div className='d-flex w-25 justify-content-end'>
-                            {!isLoggedIn &&
+                            {!isLoggedIn && !signUpLogin &&
                                 <div className='d-flex w-25 justify-content-end'>
                                     <div className='m-1'>
                                         <button className="btn btn-sm bg-white" onClick={handleLogin}><b>Login</b></button>

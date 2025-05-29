@@ -7,8 +7,11 @@ import { Link } from 'react-router-dom';
 function LoginPage() {
     return (
         <>
-            <section className='container-fluid d-flex align-items-center justify-content-center p-5'>
-                <Login />
+            <section>
+                <Navbar signUpLogin={true} />
+                <div className='container-fluid d-flex align-items-center justify-content-center p-5'>
+                    <Login />
+                </div>
             </section>
         </>
     );

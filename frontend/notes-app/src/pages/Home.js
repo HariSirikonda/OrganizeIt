@@ -24,9 +24,8 @@ function Home() {
                 <p className='text-muted fs-5 mt-3'>
                     All your thoughts and ideas in one place — accessible anywhere, anytime.
                 </p>
-
                 {!isLoggedIn &&
-                    <button className='btn btn-primary px-4 py-2 mt-4 shadow-sm' onClick={handleGetStarted}>
+                    <button className='btn nav-color text-white px-4 py-2 mt-4' onClick={handleGetStarted}>
                         Start Writing
                     </button>
                 }
