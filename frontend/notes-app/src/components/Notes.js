@@ -15,8 +15,6 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirm, 
         handleTogglePin(id, newPinStatus);
     }
 
-
-
     return (
         <div>
             <div className='box rounded shadow p-2 mt-1 mb-3' style={{ width: '420px' }}>

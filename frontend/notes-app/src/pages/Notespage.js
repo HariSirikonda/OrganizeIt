@@ -215,7 +215,18 @@ function Notespage() {
                                 </div>
                             ))}
                     </div>
-                ) : ("Login to see the Notes")}
+                ) : (
+                    <>
+                        <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span className="display-6">Please login to see the analytics...</span>
+                            </div>
+                            <div class="spinner-border text-secondary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
             {addNote && (
                 <div className='notes-form bg-light' style={{ width: '1000px', height: '500px' }}>
@@ -276,15 +287,18 @@ function Notespage() {
                     </div>
                 </div>
             )}
-            <div
-                className='plus rounded-circle shadow add-notes'
-                onClick={() => {
-                    setAddNote(!addNote);
-                    console.log("add notes clicked");
-                }}
-            >
-                <img className='rounded-circle' src={PlusIcon} alt='Add' style={{ width: '30px', height: '30px' }} />
-            </div>
+            {isLoggedIn &&
+                <div
+                    className='plus rounded-circle shadow add-notes'
+                    onClick={() => {
+                        setAddNote(!addNote);
+                        console.log("add notes clicked");
+                    }}
+                >
+                    <img className='rounded-circle' src={PlusIcon} alt='Add' style={{ width: '30px', height: '30px' }} />
+                </div>
+
+            }
         </div>
     );
 }

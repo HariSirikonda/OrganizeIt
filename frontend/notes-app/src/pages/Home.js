@@ -9,13 +9,11 @@ import ImgCard4 from '../assets/smarttools.avif';
 import axiosInstance from '../utils/axiosInstance';
 
 function Home() {
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
+    const [isLoggedIn] = useState(localStorage.getItem('token'));
     const navigate = useNavigate();
     const handleGetStarted = () => {
         navigate('/signup');
     };
-
-
 
     return (
         <div>

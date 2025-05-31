@@ -63,6 +63,20 @@ body {
     height: 60px;
 }
 
+.table-container {
+    margin: 3rem auto;
+    max-width: 1000px;
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
 .plus {
     position: fixed;
     bottom: 60px;
@@ -96,8 +110,6 @@ body {
         opacity: 1;
     }
 }
-
-
 
 .bottom-border {
     border-bottom: 2px solid black;
