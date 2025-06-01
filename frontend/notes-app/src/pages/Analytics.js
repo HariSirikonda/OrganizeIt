@@ -6,6 +6,11 @@ import ShareButton from "../assets/share.png";
 function AnalyticsPage() {
     const [isLoggedIn] = useState(localStorage.getItem('token'));
     const [userInfo, setUserInfo] = useState(null);
+    const [notes, setNotes] = useState(null);
+    const [doneNotes, setDoneNotes] = useState(0);
+    const [progressNotes, setProgressNotes] = useState(0);
+    const [pendingNotes, setPendingNotes] = useState(0);
+
 
     const getUserInfo = async () => {
         try {
@@ -20,8 +25,47 @@ function AnalyticsPage() {
         }
     };
 
+    const CountNotes = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axiosInstance.get('/get-all-notes', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!response.data.error) {
+                const allNotes = response.data.notes;
+                setNotes(allNotes); // ✅ update state
+
+                // ✅ use the freshly received notes directly
+                let done = 0;
+                let pending = 0;
+                let progress = 0;
+
+                allNotes.forEach(note => {
+                    if (note.status === "Done") {
+                        done++;
+                    } else if (note.status === "Pending") {
+                        pending++;
+                    } else {
+                        progress++;
+                    }
+                });
+
+                setDoneNotes(done);
+                setPendingNotes(pending);
+                setProgressNotes(progress);
+            }
+        } catch (error) {
+            console.error("Error fetching notes:", error);
+        }
+    };
+
+
     useEffect(() => {
         getUserInfo();
+        CountNotes();
     }, []);
 
     return (
@@ -57,23 +101,24 @@ function AnalyticsPage() {
                                 style={{ maxHeight: "170px", objectFit: 'cover' }}
                             >
                                 <h2 className="text-start text-success">Completed Tasks</h2>
-                                <h1 className="text-center text-success fw-bold display-2">34</h1>
+                                <h1 className="text-center text-success fw-bold display-2">{doneNotes}</h1>
                             </div>
                             <div
                                 className="task-card shadow rounded-3 p-4 border-top border-5 border-warning mx-5 my-3"
                                 style={{ maxHeight: "170px", objectFit: 'cover' }}
                             >
                                 <h2 className="text-warning text-start">In Progress Tasks</h2>
-                                <h1 className="text-center text-warning fw-bold display-2">40</h1>
+                                <h1 className="text-center text-warning fw-bold display-2">{progressNotes}</h1>
                             </div>
                             <div
                                 className="task-card shadow rounded-3 p-4 border-top border-5 border-danger mx-5 my-3"
                                 style={{ maxHeight: "170px", objectFit: 'cover' }}
                             >
                                 <h2 className="text-danger text-start">Pending Tasks</h2>
-                                <h1 className="text-center text-danger fw-bold display-2">32</h1>
+                                <h1 className="text-center text-danger fw-bold display-2">{pendingNotes}</h1>
                             </div>
                         </div>
+                        {/* Cache table */}
                         <div class="table-responsive">
                             <table class="table table-striped align-middle">
                                 <thead class="table-primary">
@@ -97,16 +142,6 @@ function AnalyticsPage() {
                                 </tbody>
                             </table>
                         </div>
-
-                        {/* cache */}
-                        {/* <div className="container border-top p-2">
-                            <div className="container border-5 border-start border-secondary m-1">
-                                <span className="lead">3 tasks done today</span>
-                            </div>
-                            <div className="container border-5 border-start border-secondary m-1">
-                                <span className="lead">+2 in last hour</span>
-                            </div>
-                        </div> */}
                     </>
                 ) : (
                     <>
