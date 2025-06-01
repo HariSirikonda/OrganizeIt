@@ -3,11 +3,20 @@ import Edit from '../assets/edit.png';
 import Delete from '../assets/delete.png';
 import PinImg from '../assets/pin.png';
 import PinnedImg from '../assets/pinned.png';
-import axiosInstance from '../utils/axiosInstance';
 
 function Notes({ id, title, date, description, status, isPinned, handleConfirm, handleTogglePin, handleEdit }) {
 
     const [pinned, setPinned] = useState(isPinned);
+    const [expanded, setExpanded] = useState(false);
+    const limit = 70;
+
+    const toggleExpanded = () => handleEdit();
+
+    const getDisplayText = () => {
+        if (description.length <= limit) return description;
+        if (expanded) return description;
+        return description.slice(0, limit) + '...';
+    };
 
     const togglePin = () => {
         const newPinStatus = !pinned;
@@ -46,11 +55,23 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirm, 
                 <div>
                     <span className='text-start rounded px-1 fs-8'>{date}</span>
                 </div>
-                <div className='m-1 pt-2 pb-2'>
-                    {description}
+                <div className='m-1 pt-2 pb-2' style={{ wordBreak: 'break-word' }}>
+                    {getDisplayText()}
+                    {description.length > limit && (
+                        <span
+                            onClick={toggleExpanded}
+                            style={{ color: 'blue', cursor: 'pointer', marginLeft: '5px', fontSize: '14px' }}
+                        >
+                            {expanded ? 'Show less' : 'Show more'}
+                        </span>
+                    )}
                 </div>
                 <div className="d-flex justify-content-end">
-                    <button className='btn shadow-sm' onClick={togglePin}>
+                    <button
+                        className='btn shadow-sm'
+                        onClick={togglePin}
+
+                    >
                         <img src={pinned ? PinnedImg : PinImg} alt='show me' style={{ width: "20px", height: "20px" }} />
                     </button>
                 </div>

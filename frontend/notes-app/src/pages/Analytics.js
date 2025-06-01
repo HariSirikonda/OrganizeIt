@@ -11,7 +11,6 @@ function AnalyticsPage() {
     const [progressNotes, setProgressNotes] = useState(0);
     const [pendingNotes, setPendingNotes] = useState(0);
 
-
     const getUserInfo = async () => {
         try {
             const response = await axiosInstance.get("/get-user");
@@ -36,9 +35,8 @@ function AnalyticsPage() {
 
             if (!response.data.error) {
                 const allNotes = response.data.notes;
-                setNotes(allNotes); // ✅ update state
+                setNotes(allNotes);
 
-                // ✅ use the freshly received notes directly
                 let done = 0;
                 let pending = 0;
                 let progress = 0;
@@ -66,7 +64,7 @@ function AnalyticsPage() {
     useEffect(() => {
         getUserInfo();
         CountNotes();
-    }, []);
+    }, []); //Update not oon the initial load here --
 
     return (
         <>
@@ -129,12 +127,17 @@ function AnalyticsPage() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr className="table-row">
                                         <td>Gaming Mouse</td>
                                         <td>2025-05-28</td>
                                         <td><span class="badge bg-danger">Pending</span></td>
                                     </tr>
-                                    <tr>
+                                    <tr className="table-row">
+                                        <td>Bluetooth Speaker</td>
+                                        <td>2025-05-27</td>
+                                        <td><span class="badge bg-success text-dark">done</span></td>
+                                    </tr>
+                                    <tr className="table-row">
                                         <td>Bluetooth Speaker</td>
                                         <td>2025-05-27</td>
                                         <td><span class="badge bg-success text-dark">done</span></td>
