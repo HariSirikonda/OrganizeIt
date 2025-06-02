@@ -61,7 +61,7 @@ function Navbar({ showSearch, showProfile, signUpLogin }) {
 
     return (
         <div>
-            <nav class="navbar nav-color navbar-expand-lg">
+            <nav class="navbar nav-color navbar-expand-lg fixed-top">
                 <div class="container-fluid">
                     <Link class="navbar-brand text-white" to='/'><b>OrganizeIt</b></Link>
                     <div class="collapse navbar-collapse">
