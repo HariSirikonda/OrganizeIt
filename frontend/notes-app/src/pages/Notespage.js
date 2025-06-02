@@ -95,7 +95,7 @@ function Notespage() {
         }
     };
 
-    const handleConfirm = (notesId) => {
+    const handleConfirmDelete = (notesId) => {
         setNoteId(notesId);
         setShowConfirm(true);
     };
@@ -114,7 +114,6 @@ function Notespage() {
         } catch (error) {
             console.error("Failed to update pinned status:", error.response?.data?.message || error.message);
             handleRevert();
-            //Bug here to fix : we cannot revert the UI back to the notes component to show the unpin button
         }
     };
 
@@ -178,8 +177,9 @@ function Notespage() {
                         onChange={(e) => { setFilterOption(e.target.value) }}
                     >
                         <option selected value="All">All Notes</option>
-                        <option value="Pinned">Pinned</option>
-                        <option value="Unpinned">Unpinned</option>
+                        <option value="Done">Done</option>
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
                     </select>
                     <button
                         className='btn nav-color m-2 text-white'
@@ -192,28 +192,22 @@ function Notespage() {
             <div className="container webkit-scrollbar">
                 {isLoggedIn ? (
                     <div className="row">
-                        {notes
-                            .filter((note) => {
-                                if (filterOption === "Pinned") return note.isPinned === true;
-                                if (filterOption === "Unpinned") return note.isPinned === false;
-                                return true;
-                            })
-                            .map((note, index) => (
-                                <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
-                                    <Notes
-                                        title={note.title}
-                                        date={note.createdAt.slice(0, 10)}
-                                        description={note.description}
-                                        status={note.status}
-                                        isPinned={note.isPinned}
-                                        handleEdit={() => { handleEdit(note) }}
-                                        handleTogglePin={handleTogglePin}
-                                        handleConfirm={handleConfirm}
-                                        handleRevert={handleRevert}
-                                        id={note._id}
-                                    />
-                                </div>
-                            ))}
+                        {notes.map((note, index) => (
+                            <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
+                                <Notes
+                                    title={note.title}
+                                    date={note.createdAt.slice(0, 10)}
+                                    description={note.description}
+                                    status={note.status}
+                                    isPinned={note.isPinned}
+                                    handleEdit={() => { handleEdit(note) }}
+                                    handleTogglePin={handleTogglePin}
+                                    handleConfirmDelete={handleConfirmDelete}
+                                    handleRevert={handleRevert}
+                                    id={note._id}
+                                />
+                            </div>
+                        ))}
                     </div>
                 ) : (
                     <>

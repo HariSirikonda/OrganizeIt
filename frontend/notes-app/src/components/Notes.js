@@ -4,7 +4,7 @@ import Delete from '../assets/delete.png';
 import PinImg from '../assets/pin.png';
 import PinnedImg from '../assets/pinned.png';
 
-function Notes({ id, title, date, description, status, isPinned, handleConfirm, handleTogglePin, handleEdit }) {
+function Notes({ id, title, date, description, status, isPinned, handleConfirmDelete, handleTogglePin, handleEdit }) {
 
     const [pinned, setPinned] = useState(isPinned);
     const [expanded, setExpanded] = useState(false);
@@ -35,7 +35,7 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirm, 
                         <button className='btn shadow-sm' onClick={handleEdit}>
                             <img src={Edit} alt='edit' style={{ width: '20px', height: '20px' }} />
                         </button>
-                        <button className='btn shadow-sm' onClick={() => handleConfirm(id)}>
+                        <button className='btn shadow-sm' onClick={() => handleConfirmDelete(id)}>
                             <img src={Delete} alt='edit' style={{ width: '20px', height: '20px' }} />
                         </button>
                         <div className='ps-2 mt-1 text-dark'>
