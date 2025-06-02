@@ -8,7 +8,7 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirmDe
 
     const [pinned, setPinned] = useState(isPinned);
     const [expanded, setExpanded] = useState(false);
-    const limit = 70;
+    const limit = 34;
 
     const toggleExpanded = () => setExpanded(!expanded);
 

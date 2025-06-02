@@ -5,6 +5,7 @@ import PlusIcon from '../assets/plus.png';
 import CloseIcon from '../assets/remove.png';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import { FastForward } from 'lucide-react';
 
 
 function Notespage() {
@@ -12,7 +13,7 @@ function Notespage() {
     const [addNote, setAddNote] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [editNoteId, setEditNoteId] = useState(null);
-    const [filterOption, setFilterOption] = useState("Filter");
+    const [filterOption, setFilterOption] = useState("All");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("Pending");
@@ -20,6 +21,9 @@ function Notespage() {
     const [showConfirm, setShowConfirm] = useState();
     const [noteId, setNoteId] = useState("");
     const navigate = useNavigate();
+    const pinnedNotes = notes.filter(note => note.isPinned);
+    const unpinnedNotes = notes.filter(note => !note.isPinned);
+
 
     const handleAddNote = async (e) => {
         e.preventDefault();
@@ -100,7 +104,6 @@ function Notespage() {
         setShowConfirm(true);
     };
 
-
     const handleRevert = () => {
         alert("Notes cannot be updated at this movement..!");
     };
@@ -127,7 +130,13 @@ function Notespage() {
             });
 
             if (!response.data.error) {
-                setNotes(response.data.notes);
+                let allNotes = response.data.notes;
+
+                if (filterOption !== "All") {
+                    allNotes = allNotes.filter(note => note.status === filterOption);
+                }
+
+                setNotes(allNotes);
             }
         } catch (error) {
             console.error("Error fetching notes:", error);
@@ -136,7 +145,7 @@ function Notespage() {
 
     useEffect(() => {
         fetchNotes();
-    }, []);
+    }, [filterOption]);
 
     const hanldeUpdateNotes = () => {
         navigate(0);
@@ -192,23 +201,53 @@ function Notespage() {
             <div className="container webkit-scrollbar">
                 {isLoggedIn ? (
                     <div className="row">
-                        {notes.map((note, index) => (
-                            <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
-                                <Notes
-                                    title={note.title}
-                                    date={note.createdAt.slice(0, 10)}
-                                    description={note.description}
-                                    status={note.status}
-                                    isPinned={note.isPinned}
-                                    handleEdit={() => { handleEdit(note) }}
-                                    handleTogglePin={handleTogglePin}
-                                    handleConfirmDelete={handleConfirmDelete}
-                                    handleRevert={handleRevert}
-                                    id={note._id}
-                                />
-                            </div>
-                        ))}
+                        {/* Pinned Notes */}
+                        {pinnedNotes.length > 0 && (
+                            <>
+                                <h5 className="w-100">Pinned Notes</h5>
+                                {pinnedNotes.map((note, index) => (
+                                    <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
+                                        <Notes
+                                            title={note.title}
+                                            date={note.createdAt.slice(0, 10)}
+                                            description={note.description}
+                                            status={note.status}
+                                            isPinned={note.isPinned}
+                                            handleEdit={() => handleEdit(note)}
+                                            handleTogglePin={handleTogglePin}
+                                            handleConfirmDelete={handleConfirmDelete}
+                                            handleRevert={handleRevert}
+                                            id={note._id}
+                                        />
+                                    </div>
+                                ))}
+                            </>
+                        )}
+
+                        {/* Unpinned Notes */}
+                        {unpinnedNotes.length > 0 && (
+                            <>
+                                {pinnedNotes.length > 0 && <h5 className="w-100 mt-3">Others</h5>}
+                                {unpinnedNotes.map((note, index) => (
+                                    <div key={index} className="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex">
+                                        <Notes
+                                            title={note.title}
+                                            date={note.createdAt.slice(0, 10)}
+                                            description={note.description}
+                                            status={note.status}
+                                            isPinned={note.isPinned}
+                                            handleEdit={() => handleEdit(note)}
+                                            handleTogglePin={handleTogglePin}
+                                            handleConfirmDelete={handleConfirmDelete}
+                                            handleRevert={handleRevert}
+                                            id={note._id}
+                                        />
+                                    </div>
+                                ))}
+                            </>
+                        )}
                     </div>
+
                 ) : (
                     <>
                         <div className="d-flex align-items-center justify-content-between">
