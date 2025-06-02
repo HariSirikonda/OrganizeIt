@@ -60,6 +60,15 @@ function AnalyticsPage() {
         }
     };
 
+    const handleShareAnalytics = () => {
+        navigator.clipboard.writeText(window.location.href)
+            .then(() => {
+                alert("Page link copied to clipboard!");
+            })
+            .catch(err => {
+                console.error("Failed to copy: ", err);
+            });
+    };
 
     useEffect(() => {
         getUserInfo();
@@ -80,10 +89,11 @@ function AnalyticsPage() {
                                 <div className="">
                                     <button
                                         type="button"
-                                        class="btn btn-white border shadow-sm"
+                                        class="btn btn-white shadow-sm"
                                         data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="Share your progress"
+                                        data-bs-placement="bottom"
+                                        title="Copy link"
+                                        onClick={handleShareAnalytics}
                                     >
                                         <img src={ShareButton} alt="show me" style={{ width: "18px", height: "18px" }} />
                                     </button>

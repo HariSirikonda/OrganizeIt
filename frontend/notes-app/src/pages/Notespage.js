@@ -114,6 +114,7 @@ function Notespage() {
                 pinned: newPinned
             });
             console.log("Pinned status updated:", response.data.message);
+            navigate(0);
         } catch (error) {
             console.error("Failed to update pinned status:", error.response?.data?.message || error.message);
             handleRevert();
