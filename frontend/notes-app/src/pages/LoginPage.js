@@ -8,7 +8,6 @@ function LoginPage() {
     return (
         <>
             <section>
-                <Navbar signUpLogin={true} />
                 <div className='container-fluid d-flex align-items-center justify-content-center p-5'>
                     <Login />
                 </div>

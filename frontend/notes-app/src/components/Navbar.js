@@ -5,9 +5,11 @@ import Remove from '../assets/remove.png';
 import User from '../assets/user.png';
 import axiosInstance from '../utils/axiosInstance';
 
-function Navbar({ showSearch, showProfile, signUpLogin }) {
+function Navbar() {
     const [search, setSearch] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token'));
+    const [showProfile, setShowProfile] = useState(true);
+    const [showSearch, setShowSearch] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
     const [profileClick, setProfileClick] = useState(false);
     const navigate = useNavigate()
 
@@ -18,6 +20,7 @@ function Navbar({ showSearch, showProfile, signUpLogin }) {
             const response = await axiosInstance.get("/get-user");
             if (response.data && response.data.user) {
                 setUserInfo(response.data.user);
+                setIsLoggedIn(!!localStorage.getItem('token'));
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -55,13 +58,14 @@ function Navbar({ showSearch, showProfile, signUpLogin }) {
 
     const onLogout = (e) => {
         localStorage.clear();
+        setIsLoggedIn(false);
+        setUserInfo(null);
         navigate(0);
-        // navigate('/login');
     }
 
     return (
         <div>
-            <nav class="navbar nav-color navbar-expand-lg fixed-top">
+            <nav class="navbar nav-color navbar-expand-lg">
                 <div class="container-fluid">
                     <Link class="navbar-brand text-white" to='/'><b>OrganizeIt</b></Link>
                     <div class="collapse navbar-collapse">
@@ -90,7 +94,7 @@ function Navbar({ showSearch, showProfile, signUpLogin }) {
                             </div>
                         }
                         <div className='d-flex w-25 justify-content-end'>
-                            {!isLoggedIn && !signUpLogin &&
+                            {!isLoggedIn &&
                                 <div className='d-flex w-25 justify-content-end'>
                                     <div className='m-1'>
                                         <button className="btn btn-sm bg-white" onClick={handleLogin}><b>Login</b></button>

@@ -77,7 +77,6 @@ function AnalyticsPage() {
 
     return (
         <>
-            <Navbar showSearch={true} showProfile={true} />
             <div className="container p-5 my-5 shadow">
                 {isLoggedIn ? (
                     <>

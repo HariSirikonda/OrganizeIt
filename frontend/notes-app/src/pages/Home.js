@@ -11,13 +11,13 @@ import axiosInstance from '../utils/axiosInstance';
 function Home() {
     const [isLoggedIn] = useState(localStorage.getItem('token'));
     const navigate = useNavigate();
+
     const handleGetStarted = () => {
         navigate('/signup');
     };
 
     return (
         <div>
-            <Navbar showSearch={true} showProfile={true} />
             {/* Header Section */}
             <header className='container py-5 text-center'>
                 <h1 className='fw-bold display-4'>Take Notes. Stay Organized.</h1>

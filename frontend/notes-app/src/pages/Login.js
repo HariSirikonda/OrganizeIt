@@ -28,6 +28,7 @@ function Login() {
             if (response.data && response.data.accessToken) {
                 localStorage.setItem("token", response.data.accessToken);
                 navigate("/home");
+                window.location.reload();
             }
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {

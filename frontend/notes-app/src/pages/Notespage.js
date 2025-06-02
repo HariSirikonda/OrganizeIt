@@ -154,7 +154,6 @@ function Notespage() {
 
     return (
         <div>
-            <Navbar showSearch={true} showLR={!isLoggedIn} showProfile={true} />
             {showConfirm && (
                 <div className="alert alert-danger border-0 shadow-sm text-dark slide-down confirm-delete d-flex align-items-center jusrify-content-center" role="alert" style={{ width: "450px", height: "60px" }}>
                     <span className='mx-3'>Are you sure, want to delete ?</span>

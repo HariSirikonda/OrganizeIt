@@ -1,7 +1,7 @@
 import './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import profile from './pages/profile';
@@ -14,6 +14,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route path='/' exact Component={Home} />
           <Route path='/home' Component={Home} />
