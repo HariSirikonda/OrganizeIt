@@ -15,7 +15,7 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirmDe
     const getDisplayText = () => {
         if (description.length <= limit) return description;
         if (expanded) return description;
-        return description.slice(0, limit) + '...';
+        return description.slice(0, limit) + "...";
     };
 
     const togglePin = () => {
