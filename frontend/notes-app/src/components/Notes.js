@@ -10,7 +10,7 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirmDe
     const [expanded, setExpanded] = useState(false);
     const limit = 70;
 
-    const toggleExpanded = () => handleEdit();
+    const toggleExpanded = () => setExpanded(!expanded);
 
     const getDisplayText = () => {
         if (description.length <= limit) return description;
