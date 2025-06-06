@@ -252,7 +252,7 @@ function Notespage() {
                     <>
                         <div className="d-flex align-items-center justify-content-between">
                             <div>
-                                <span className="display-6">Please login to see the analytics...</span>
+                                <span className="display-6">Please login to see your Notes...</span>
                             </div>
                             <div class="spinner-border text-secondary" role="status">
                                 <span class="visually-hidden">Loading...</span>
