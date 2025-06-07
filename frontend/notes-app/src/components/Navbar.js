@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Search from '../assets/search.png';
 import Remove from '../assets/remove.png';
-import User from '../assets/user.png';
+import User from '../assets/user.jpg';
 import axiosInstance from '../utils/axiosInstance';
 
 function Navbar() {
@@ -135,15 +135,15 @@ function Navbar() {
                                 </div>
                             }
                             <div
-                                className='bg-white p-1 rounded-circle'
+                                className='d-flex align-items-center justify-content-center mx-1'
                                 onClick={handleProfileClick}
                             >
                                 <img
-                                    className='img-fluid'
+                                    className='img-fluid rounded-circle'
                                     src={User}
                                     alt='show me'
                                     style={{ width: '32px', height: '32px' }}
-                                ></img>
+                                />
                             </div>
                         </div>
                     </div>

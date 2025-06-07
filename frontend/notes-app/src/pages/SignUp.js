@@ -112,7 +112,7 @@ function SignUp() {
                         id="ContinueButton"
                         type="submit"
                         onClick={handleSignup}
-                        className="nav-color text-white submit_btn btn btn-md w-100 my-2 p-1"
+                        className="nav-color text-white shadow-none submit_btn btn btn-md w-100 my-2 p-1"
                     >
                         <b>Sign Up</b>
                     </button>

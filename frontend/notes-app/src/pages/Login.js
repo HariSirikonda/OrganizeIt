@@ -80,7 +80,7 @@ function Login() {
                 <div className="mt-2 text-end">
                     <Link className="text-primary" to="/forgot-Password">Forget Password</Link>
                 </div>
-                <button id="ContinueButton" type="submit" className="submit_btn btn btn-md btn-primary w-100 my-2 p-1"><b>Login</b></button>
+                <button id="ContinueButton" type="submit" className="submit_btn btn btn-md nav-color text-white shadow-none w-100 my-2 p-1"><b>Login</b></button>
                 <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
                 <div className='m-1 d-flex align-items-center justify-content-center'>
                     <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
