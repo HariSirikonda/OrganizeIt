@@ -1,19 +1,43 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Search from '../assets/search.png';
 import Remove from '../assets/remove.png';
 import User from '../assets/user.png';
 import axiosInstance from '../utils/axiosInstance';
 
-function Navbar() {
+function Navbar({ searchText }) {
     const [search, setSearch] = useState('');
     const [showProfile, setShowProfile] = useState(true);
     const [showSearch, setShowSearch] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
     const [profileClick, setProfileClick] = useState(false);
-    const navigate = useNavigate()
-
+    const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState(null);
+
+    const menuRef = useRef(null);
+
+    // Handle clicks outside the profile dropdown
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setProfileClick(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleSearchChange = (e) => {
+        const text = e.target.value;
+        setSearch(text);
+        if (text.trim() !== '') {
+            navigate('/notes', { state: { query: text } });
+        }
+    };
 
     const getUserInfo = async () => {
         try {
@@ -84,13 +108,26 @@ function Navbar() {
                         </div>
                         {showSearch &&
                             <div className='d-flex bg-white rounded w-50 shadow-sm'>
-                                <input className='form-control border-0 shadow-none rounded py-1' placeholder='Search notes' type='text' style={{ fontSize: '0.9rem' }} value={search} onChange={(e) => setSearch(e.target.value)} />
+                                <input
+                                    className='form-control border-0 shadow-none rounded py-1'
+                                    placeholder='Search notes'
+                                    type='text'
+                                    style={{ fontSize: '0.9rem' }}
+                                    value={search}
+                                    onChange={handleSearchChange}
+                                />
                                 {search &&
                                     <button className='btn shadow-none bg-white border-0 rounded-circle' onClick={(e) => setSearch('')}>
                                         <img className='m-1' src={Remove} alt='show me' style={{ width: '15px', height: '15px' }}></img>
                                     </button>
                                 }
-                                <img className='m-1 p-1' src={Search} alt='show me' style={{ width: '28px', height: '28px' }}></img>
+                                <img
+                                    className='m-1 p-1'
+                                    src={Search}
+                                    alt='show me'
+                                    style={{ width: '28px', height: '28px' }}
+                                    onClick={handleSearchChange}
+                                ></img>
                             </div>
                         }
                         <div className='d-flex w-25 justify-content-end'>
@@ -112,7 +149,7 @@ function Navbar() {
                         </div>
                     </div>
                     {profileClick && isLoggedIn && (
-                        <div className='profile-dropdown border'>
+                        <div className='profile-dropdown border' ref={menuRef}>
                             <p className='text-dark fw-bold text-center'>{userInfo?.fullName}</p>
                             <button className='btn form-control text-start shadow-none' onClick={handleEditProfile}>Edit Profile</button>
                             <button className='btn form-control text-start shadow-none'>Settings & Profile</button>

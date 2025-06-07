@@ -4,7 +4,7 @@ import Notes from '../components/Notes';
 import PlusIcon from '../assets/plus.png';
 import CloseIcon from '../assets/remove.png';
 import axiosInstance from '../utils/axiosInstance';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FastForward } from 'lucide-react';
 
 
@@ -144,6 +144,14 @@ function Notespage() {
         }
     };
 
+    const location = useLocation();
+    const searchQuery = location.state?.searchQuery;
+
+    useEffect(() => {
+        console.log("Search Query Received:", searchQuery);
+        // You can now filter notes using searchQuery
+    }, [searchQuery]);
+
     useEffect(() => {
         fetchNotes();
     }, [filterOption]);
@@ -252,7 +260,7 @@ function Notespage() {
                     <>
                         <div className="d-flex align-items-center justify-content-between">
                             <div>
-                                <span className="display-6">Please login to see the analytics...</span>
+                                <span className="display-6">Please login to see your Notes...</span>
                             </div>
                             <div class="spinner-border text-secondary" role="status">
                                 <span class="visually-hidden">Loading...</span>
