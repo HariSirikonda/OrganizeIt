@@ -134,14 +134,21 @@ function Navbar() {
                                     </div>
                                 </div>
                             }
-
-                            <button className='bg-white border-0 rounded-circle m-1' style={{ width: '32px', height: '32px' }} onClick={handleProfileClick}>
-                                <img className='img-fluid' src={User} alt='show me'></img>
-                            </button>
+                            <div
+                                className='bg-white p-1 rounded-circle'
+                                onClick={handleProfileClick}
+                            >
+                                <img
+                                    className='img-fluid'
+                                    src={User}
+                                    alt='show me'
+                                    style={{ width: '32px', height: '32px' }}
+                                ></img>
+                            </div>
                         </div>
                     </div>
                     {profileClick && isLoggedIn && (
-                        <div className='profile-dropdown border' ref={menuRef}>
+                        <div className='profile-dropdown shadow-sm border' ref={menuRef}>
                             <p className='text-dark fw-bold text-center'>{userInfo?.fullName}</p>
                             <button className='btn form-control text-start shadow-none' onClick={handleEditProfile}>Edit Profile</button>
                             <button className='btn form-control text-start shadow-none'>Settings & Profile</button>

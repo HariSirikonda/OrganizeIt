@@ -21,8 +21,8 @@ body {
 
 .profile-dropdown {
     position: absolute;
-    top: 48px;
-    right: 15px;
+    top: 52px;
+    right: 10px;
     width: 260px;
     background-color: #fff;
     border-radius: 12px;
