@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar searchText={searchText} />
+        <Navbar searchText={searchText} setSearchText={setSearchText} />
         <Routes>
           <Route path='/' exact Component={Home} />
           <Route path='/home' Component={Home} />

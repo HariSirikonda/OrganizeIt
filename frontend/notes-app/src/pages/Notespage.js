@@ -4,7 +4,7 @@ import Notes from '../components/Notes';
 import PlusIcon from '../assets/plus.png';
 import CloseIcon from '../assets/remove.png';
 import axiosInstance from '../utils/axiosInstance';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FastForward } from 'lucide-react';
 
 
@@ -143,6 +143,14 @@ function Notespage() {
             console.error("Error fetching notes:", error);
         }
     };
+
+    const location = useLocation();
+    const searchQuery = location.state?.searchQuery;
+
+    useEffect(() => {
+        console.log("Search Query Received:", searchQuery);
+        // You can now filter notes using searchQuery
+    }, [searchQuery]);
 
     useEffect(() => {
         fetchNotes();

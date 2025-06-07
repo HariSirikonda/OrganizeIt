@@ -121,7 +121,13 @@ function Navbar({ searchText }) {
                                         <img className='m-1' src={Remove} alt='show me' style={{ width: '15px', height: '15px' }}></img>
                                     </button>
                                 }
-                                <img className='m-1 p-1' src={Search} alt='show me' style={{ width: '28px', height: '28px' }}></img>
+                                <img
+                                    className='m-1 p-1'
+                                    src={Search}
+                                    alt='show me'
+                                    style={{ width: '28px', height: '28px' }}
+                                    onClick={handleSearchChange}
+                                ></img>
                             </div>
                         }
                         <div className='d-flex w-25 justify-content-end'>
