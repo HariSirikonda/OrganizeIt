@@ -193,7 +193,7 @@ function Notespage() {
                         value={filterOption}
                         onChange={(e) => { setFilterOption(e.target.value) }}
                     >
-                        <option selected value="All">All Notes</option>
+                        <option value="All">All Notes</option>
                         <option value="Done">Done</option>
                         <option value="Pending">Pending</option>
                         <option value="In Progress">In Progress</option>

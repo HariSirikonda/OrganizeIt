@@ -5,39 +5,25 @@ import Remove from '../assets/remove.png';
 import User from '../assets/user.png';
 import axiosInstance from '../utils/axiosInstance';
 
-function Navbar({ searchText }) {
-    const [search, setSearch] = useState('');
-    const [showProfile, setShowProfile] = useState(true);
+function Navbar() {
     const [showSearch, setShowSearch] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
     const [profileClick, setProfileClick] = useState(false);
     const navigate = useNavigate();
+    const [searchText, setSearchText] = useState("");
     const [userInfo, setUserInfo] = useState(null);
 
     const menuRef = useRef(null);
 
-    // Handle clicks outside the profile dropdown
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
                 setProfileClick(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
+        return () => { document.removeEventListener('mousedown', handleClickOutside); };
     }, []);
-
-    const handleSearchChange = (e) => {
-        const text = e.target.value;
-        setSearch(text);
-        if (text.trim() !== '') {
-            navigate('/notes', { state: { query: text } });
-        }
-    };
 
     const getUserInfo = async () => {
         try {
@@ -89,20 +75,20 @@ function Navbar({ searchText }) {
 
     return (
         <div>
-            <nav class="navbar nav-color navbar-expand-lg fixed-top">
-                <div class="container-fluid">
-                    <Link class="navbar-brand text-white" to='/'><b>OrganizeIt</b></Link>
-                    <div class="collapse navbar-collapse">
+            <nav className="navbar nav-color navbar-expand-lg fixed-top">
+                <div className="container-fluid">
+                    <Link className="navbar-brand text-white" to='/'><b>OrganizeIt</b></Link>
+                    <div className="collapse navbar-collapse">
                         <div className='d-flex w-25'>
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <Link class="nav-link text-white active" to='/'>Home</Link>
+                            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li className="nav-item">
+                                    <Link className="nav-link text-white active" to='/'>Home</Link>
                                 </li>
-                                <li class="nav-item">
-                                    <Link class="nav-link text-white active" to='/notes'>My Notes</Link>
+                                <li className="nav-item">
+                                    <Link className="nav-link text-white active" to='/notes'>My Notes</Link>
                                 </li>
-                                <li class="nav-item">
-                                    <Link class="nav-link text-white active" to='/analytics'>Analytics</Link>
+                                <li className="nav-item">
+                                    <Link className="nav-link text-white active" to='/analytics'>Analytics</Link>
                                 </li>
                             </ul>
                         </div>
@@ -113,12 +99,20 @@ function Navbar({ searchText }) {
                                     placeholder='Search notes'
                                     type='text'
                                     style={{ fontSize: '0.9rem' }}
-                                    value={search}
-                                    onChange={handleSearchChange}
+                                    value={searchText}
+                                    onChange={(e) => { setSearchText(e.target.value) }}
                                 />
-                                {search &&
-                                    <button className='btn shadow-none bg-white border-0 rounded-circle' onClick={(e) => setSearch('')}>
-                                        <img className='m-1' src={Remove} alt='show me' style={{ width: '15px', height: '15px' }}></img>
+                                {searchText &&
+                                    <button
+                                        className='btn shadow-none bg-white border-0 rounded-circle'
+                                        onClick={(e) => setSearchText('')}
+                                    >
+                                        <img
+                                            className='m-1'
+                                            src={Remove}
+                                            alt='show me'
+                                            style={{ width: '15px', height: '15px' }}
+                                        ></img>
                                     </button>
                                 }
                                 <img
@@ -126,7 +120,6 @@ function Navbar({ searchText }) {
                                     src={Search}
                                     alt='show me'
                                     style={{ width: '28px', height: '28px' }}
-                                    onClick={handleSearchChange}
                                 ></img>
                             </div>
                         }
@@ -141,11 +134,10 @@ function Navbar({ searchText }) {
                                     </div>
                                 </div>
                             }
-                            {showProfile &&
-                                <button className='bg-white border-0 rounded-circle m-1' style={{ width: '32px', height: '32px' }} onClick={handleProfileClick}>
-                                    <img className='img-fluid' src={User} alt='show me'></img>
-                                </button>
-                            }
+
+                            <button className='bg-white border-0 rounded-circle m-1' style={{ width: '32px', height: '32px' }} onClick={handleProfileClick}>
+                                <img className='img-fluid' src={User} alt='show me'></img>
+                            </button>
                         </div>
                     </div>
                     {profileClick && isLoggedIn && (

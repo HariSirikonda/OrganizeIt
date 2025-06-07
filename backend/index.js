@@ -33,12 +33,15 @@ app.get('/', (req, res) => {
 
 // Create Account Route
 app.post("/create-account", async (req, res) => {
-    const { fullName, email, password } = req.body;
+    const { fullName, email, password, confirmPassword } = req.body;
 
     if (!fullName || !email || !password) {
         return res.status(400).json({ error: true, message: "All fields are required" });
     }
 
+    if (password !== confirmPassword) {
+        return res.status(400).json({ error: true, message: "Passwords mismatched" });
+    }
 
     const isUser = await User.findOne({ email });
     if (isUser) {

@@ -12,11 +12,10 @@ import Navbar from './components/Navbar';
 import { useState } from 'react';
 
 function App() {
-  const [searchText, setSearchText] = useState('');
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar searchText={searchText} setSearchText={setSearchText} />
+        <Navbar />
         <Routes>
           <Route path='/' exact Component={Home} />
           <Route path='/home' Component={Home} />

@@ -10,7 +10,9 @@ function SignUp() {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
+    const [hide, setHide] = useState(true);
     const navigate = useNavigate();
 
     const handleSignup = async (e) => {
@@ -26,6 +28,7 @@ function SignUp() {
                 fullName,
                 email,
                 password,
+                confirmPassword,
             });
             if (response.data && !response.data.error && response.data.accessToken) {
                 localStorage.setItem("token", response.data.accessToken);
@@ -46,20 +49,41 @@ function SignUp() {
                         Start Creating an Account
                     </div>
                     <div className="form-floating mb-2 ">
-                        <input type="text" className="form-control shadow-none" onChange={(e) => { setFullName(e.target.value) }} id="Username" placeholder="name@example.com" />
-                        <label for="floatingInput">Full Name</label>
+                        <input
+                            type="text"
+                            className="form-control shadow-none"
+                            onChange={(e) => { setFullName(e.target.value) }}
+                            id="Username"
+                            placeholder="name@example.com"
+                        />
+                        <label htmlFor="floatingInput">Full Name</label>
                     </div>
                     <div className="form-floating mb-2 ">
-                        <input type="email" className="form-control shadow-none" onChange={(e) => { setEmail(e.target.value) }} id="Username" placeholder="name@example.com" />
-                        <label for="floatingInput">Email address</label>
+                        <input
+                            type="email"
+                            className="form-control shadow-none"
+                            onChange={(e) => { setEmail(e.target.value) }}
+                            id="email"
+                            placeholder="name@example.com"
+                        />
+                        <label htmlFor="floatingInput">Email address</label>
                     </div>
                     <div className="form-floating mb-2">
-                        <input type="password" className="form-control shadow-none" onChange={(e) => { setPassword(e.target.value) }} id="Password" placeholder="Password" />
-                        <label for="floatingPassword">Password</label>
+                        <input type={hide ? "password" : "text"} className="form-control shadow-none" onChange={(e) => { setPassword(e.target.value) }} id="Password" placeholder="Password" />
+                        <label htmlFor="floatingPassword">Password</label>
                     </div>
                     <div className="form-floating mb-2">
-                        <input type="password" className="form-control shadow-none" id="Password" placeholder="Password" />
-                        <label for="floatingPassword">Confirm Password</label>
+                        <input type={hide ? "password" : "text"} className="form-control shadow-none" id="confirmPassword" placeholder="Password" />
+                        <label htmlFor="floatingPassword">Confirm Password</label>
+                    </div>
+                    <div className="form-check m-2">
+                        <input
+                            type="checkbox"
+                            className="form-check-input shadow-none border-dark"
+                            id="exampleCheck1"
+                            onClick={(e) => { setHide(!hide) }}
+                        />
+                        <label className="form-check-label" htmlFor="exampleCheck1">Show Password</label>
                     </div>
                     <button id="ContinueButton" type="submit" onClick={handleSignup} className="nav-color text-white submit_btn btn btn-md w-100 my-2 p-1"><b>Sign Up</b></button>
                     <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
