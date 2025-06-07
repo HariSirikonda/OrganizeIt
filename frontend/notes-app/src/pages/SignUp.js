@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import GoogleIcon from '../assets/google.png';
 import LinkedIcon from '../assets/linkedin.png';
 import FacebookIcon from '../assets/facebook.png';
@@ -23,6 +23,11 @@ function SignUp() {
             return;
         }
 
+        if (password !== confirmPassword) {
+            setError("Passwords mismatched.");
+            return;
+        }
+
         try {
             const response = await axiosInstance.post("/create-account", {
                 fullName,
@@ -40,6 +45,14 @@ function SignUp() {
             setError("An error occurred. Please try again.");
         }
     };
+
+    useEffect(() => {
+        if (error) {
+            alert(error);
+            setError("");
+        }
+    }, [error]);
+
     return (
         <>
             <section className='container-fluid d-flex align-items-center justify-content-center p-3'>
@@ -69,11 +82,21 @@ function SignUp() {
                         <label htmlFor="floatingInput">Email address</label>
                     </div>
                     <div className="form-floating mb-2">
-                        <input type={hide ? "password" : "text"} className="form-control shadow-none" onChange={(e) => { setPassword(e.target.value) }} id="Password" placeholder="Password" />
+                        <input
+                            type={hide ? "password" : "text"}
+                            className="form-control shadow-none"
+                            onChange={(e) => { setPassword(e.target.value) }}
+                            id="Password"
+                            placeholder="Password" />
                         <label htmlFor="floatingPassword">Password</label>
                     </div>
                     <div className="form-floating mb-2">
-                        <input type={hide ? "password" : "text"} className="form-control shadow-none" id="confirmPassword" placeholder="Password" />
+                        <input
+                            type={hide ? "password" : "text"}
+                            className="form-control shadow-none"
+                            id="confirmPassword"
+                            placeholder="Password"
+                        />
                         <label htmlFor="floatingPassword">Confirm Password</label>
                     </div>
                     <div className="form-check m-2">
@@ -85,17 +108,41 @@ function SignUp() {
                         />
                         <label className="form-check-label" htmlFor="exampleCheck1">Show Password</label>
                     </div>
-                    <button id="ContinueButton" type="submit" onClick={handleSignup} className="nav-color text-white submit_btn btn btn-md w-100 my-2 p-1"><b>Sign Up</b></button>
-                    <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
+                    <button
+                        id="ContinueButton"
+                        type="submit"
+                        onClick={handleSignup}
+                        className="nav-color text-white submit_btn btn btn-md w-100 my-2 p-1"
+                    >
+                        <b>Sign Up</b>
+                    </button>
+                    <div className="text-center text-uppercase text-muted mb-1">
+                        <b>OR</b>
+                    </div>
                     <div className='m-2 d-flex align-items-center justify-content-center'>
                         <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='show me' src={GoogleIcon} style={{ width: "30px", height: "30px" }}></img>
+                            <img
+                                className='m-1 p-0'
+                                alt='show me'
+                                src={GoogleIcon}
+                                style={{ width: "30px", height: "30px" }}
+                            ></img>
                         </div>
                         <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='show me' src={FacebookIcon} style={{ width: "30px", height: "30px" }}></img>
+                            <img
+                                className='m-1 p-0'
+                                alt='show me'
+                                src={FacebookIcon}
+                                style={{ width: "30px", height: "30px" }}
+                            ></img>
                         </div>
                         <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img className='m-1 p-0' alt='show me' src={LinkedIcon} style={{ width: "30px", height: "30px" }}></img>
+                            <img
+                                className='m-1 p-0'
+                                alt='show me'
+                                src={LinkedIcon}
+                                style={{ width: "30px", height: "30px" }}
+                            ></img>
                         </div>
                     </div>
                 </form>

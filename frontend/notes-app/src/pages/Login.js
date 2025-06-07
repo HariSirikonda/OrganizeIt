@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GoogleIcon from '../assets/google.png';
 import LinkedIcon from '../assets/linkedin.png';
 import FacebookIcon from '../assets/facebook.png';
@@ -39,6 +39,12 @@ function Login() {
         }
     };
 
+    useEffect(() => {
+        if (error) {
+            alert(error);
+        }
+    }, [error]);
+
     return (
         <>
             <form
@@ -50,13 +56,20 @@ function Login() {
                 <div className="fw-normal text-muted mb-2">
                     New Here? <Link className="text-primary text-decoration-none fw-bold" to='/signup'>Create an Account</Link>
                 </div>
-                {error && <p className="text-danger">{error}</p>}
+                {/* {error && <p className="text-danger">{error}</p>} */}
                 <div className="form-floating mb-2 ">
                     <input type="email" className="form-control shadow-none" id="Username" onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" required />
                     <label htmlFor="Username">Email address</label>
                 </div>
                 <div className="form-floating ">
-                    <input type={hide ? "password" : "text"} className="form-control shadow-none" id="Password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" required >
+                    <input
+                        type={hide ? "password" : "text"}
+                        className="form-control shadow-none"
+                        id="Password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        required
+                    >
                     </input>
                     <div class="mb-3 form-check m-1">
                         <input type="checkbox" class="form-check-input shadow-none border-dark" id="exampleCheck1" onChange={(e) => setHide(!hide)} />
