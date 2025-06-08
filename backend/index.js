@@ -1,4 +1,5 @@
 require("dotenv").config();
+const bcrypt = require('bcryptjs');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -44,7 +45,11 @@ app.post("/create-account", async (req, res) => {
         return res.json({ error: true, message: "User already exists" });
     }
 
-    const newUser = new User({ fullName, email, password });
+    // Generate salt and hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({ fullName, email, password: hashedPassword });
     await newUser.save();
 
     const accessToken = jwt.sign({ id: newUser._id }, process.env.ACCESS_TOKEN_SECRET, {
@@ -75,7 +80,9 @@ app.post("/login", async (req, res) => {
         return res.status(400).json({ message: "User Not Found" });
     }
 
-    if (userInfo.password === password) {
+    const isMatch = await bcrypt.compare(password, userInfo.password);
+
+    if (isMatch) {
         const user = { user: userInfo };
         const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "36000m" });
 
