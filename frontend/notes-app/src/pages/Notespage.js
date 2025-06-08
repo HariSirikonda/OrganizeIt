@@ -207,7 +207,7 @@ function Notespage() {
                     </button>
                 </div>
             </div>
-            {notes.length === 0 &&
+            {notes.length === 0 && isLoggedIn &&
                 <div className="container webkit-scrollbar"><h5 className='text-muted'>No notes available!!!</h5></div>
             }
             <div className="container webkit-scrollbar">
