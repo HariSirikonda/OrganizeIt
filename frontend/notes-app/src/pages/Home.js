@@ -53,7 +53,7 @@ function Home() {
                     <div className='row g-4 justify-content-center'>
                         {[ImgCard1, ImgCard2, ImgCard3, ImgCard4].map((img, index) => (
                             <div key={index} className='col-6 col-md-3'>
-                                <div className='card shadow-sm border-0 h-100 rounded-4 overflow-hidden'>
+                                <div className='card shadow border-dark border-1 h-100 rounded-4 overflow-hidden'>
                                     <img
                                         src={img}
                                         alt={`Card ${index + 1}`}

@@ -23,7 +23,7 @@ function SignUp() {
             return;
         }
 
-        if (password !== confirmPassword) {
+        if (password != confirmPassword) {
             setError("Passwords mismatched.");
             return;
         }
@@ -94,6 +94,7 @@ function SignUp() {
                         <input
                             type={hide ? "password" : "text"}
                             className="form-control shadow-none"
+                            onChange={(e) => { setConfirmPassword(e.target.value) }}
                             id="confirmPassword"
                             placeholder="Password"
                         />
