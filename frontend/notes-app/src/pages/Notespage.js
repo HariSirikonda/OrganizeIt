@@ -138,6 +138,7 @@ function Notespage() {
                 }
 
                 setNotes(allNotes);
+                console.log(notes);
             }
         } catch (error) {
             console.error("Error fetching notes:", error);
@@ -206,6 +207,9 @@ function Notespage() {
                     </button>
                 </div>
             </div>
+            {notes.length === 0 &&
+                <div className="container webkit-scrollbar"><h5 className='text-muted'>No notes available!!!</h5></div>
+            }
             <div className="container webkit-scrollbar">
                 {isLoggedIn ? (
                     <div className="row">
