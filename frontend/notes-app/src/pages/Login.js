@@ -71,9 +71,9 @@ function Login() {
                         required
                     >
                     </input>
-                    <div class="mb-3 form-check m-1">
-                        <input type="checkbox" class="form-check-input shadow-none border-dark" id="exampleCheck1" onChange={(e) => setHide(!hide)} />
-                        <label class="form-check-label" for="exampleCheck1">Show Password</label>
+                    <div className="mb-3 form-check m-1">
+                        <input type="checkbox" className="form-check-input shadow-none border-dark" id="exampleCheck1" onChange={(e) => setHide(!hide)} />
+                        <label className="form-check-label" htmlFor="exampleCheck1">Show Password</label>
                     </div>
                     <label htmlFor="Password">Password</label>
                 </div>
@@ -83,15 +83,15 @@ function Login() {
                 <button id="ContinueButton" type="submit" className="submit_btn btn btn-md nav-color text-white shadow-none w-100 my-2 p-1"><b>Login</b></button>
                 <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
                 <div className='m-1 d-flex align-items-center justify-content-center'>
-                    <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                        <img className='m-1 p-0' alt='google' src={GoogleIcon} style={{ width: "30px", height: "30px" }} />
-                    </div>
-                    <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                        <img className='m-1 p-0' alt='facebook' src={FacebookIcon} style={{ width: "30px", height: "30px" }} />
-                    </div>
-                    <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                        <img className='m-1 p-0' alt='linkedin' src={LinkedIcon} style={{ width: "30px", height: "30px" }} />
-                    </div>
+                    <button className='btn bg-light m-2 d-flex align-items-center justify-content-center shadow-sm'>
+                        <img
+                            className='m-1 p-0'
+                            alt='show me'
+                            src={GoogleIcon}
+                            style={{ width: "30px", height: "30px" }}
+                        ></img>
+                        <span className='text-dark mx-2'>Sign Up with Google</span>
+                    </button>
                 </div>
             </form>
         </>

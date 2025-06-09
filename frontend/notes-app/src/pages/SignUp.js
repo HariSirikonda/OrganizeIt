@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import GoogleIcon from '../assets/google.png';
-import LinkedIcon from '../assets/linkedin.png';
-import FacebookIcon from '../assets/facebook.png';
-import Navbar from '../components/Navbar';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +20,7 @@ function SignUp() {
             return;
         }
 
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             setError("Passwords mismatched.");
             return;
         }
@@ -117,34 +114,23 @@ function SignUp() {
                     >
                         <b>Sign Up</b>
                     </button>
-                    <div className="text-center text-uppercase text-muted mb-1">
+                    <div className="text-center text-uppercase text-muted">
                         <b>OR</b>
                     </div>
-                    <div className='m-2 d-flex align-items-center justify-content-center'>
-                        <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
+                    <div className='m-1 d-flex align-items-center justify-content-center'>
+                        <button
+                            className='btn bg-light m-2 d-flex align-items-center justify-content-center shadow-sm'
+                            type='button'
+                            onClick={() => { console.log("Sign in with google clicked") }}
+                        >
                             <img
                                 className='m-1 p-0'
                                 alt='show me'
                                 src={GoogleIcon}
                                 style={{ width: "30px", height: "30px" }}
                             ></img>
-                        </div>
-                        <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img
-                                className='m-1 p-0'
-                                alt='show me'
-                                src={FacebookIcon}
-                                style={{ width: "30px", height: "30px" }}
-                            ></img>
-                        </div>
-                        <div className='bg-light m-2 d-flex align-items-center justify-content-center'>
-                            <img
-                                className='m-1 p-0'
-                                alt='show me'
-                                src={LinkedIcon}
-                                style={{ width: "30px", height: "30px" }}
-                            ></img>
-                        </div>
+                            <span className='text-dark mx-2'>Sign Up with Google</span>
+                        </button>
                     </div>
                 </form>
             </section>

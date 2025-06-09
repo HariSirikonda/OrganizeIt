@@ -40,7 +40,9 @@ function Navbar() {
     };
 
     useEffect(() => {
-        getUserInfo();
+        if (isLoggedIn) {
+            getUserInfo();
+        }
     }, []);
 
     const handleProfileClick = () => {
