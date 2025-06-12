@@ -83,7 +83,7 @@ function Login() {
                 <button id="ContinueButton" type="submit" className="submit_btn btn btn-md nav-color text-white shadow-none w-100 my-2 p-1"><b>Login</b></button>
                 <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
                 <div className='m-1 d-flex align-items-center justify-content-center'>
-                    <button className='btn bg-light m-2 d-flex align-items-center justify-content-center shadow-sm'>
+                    <button className='btn bg-white d-flex align-items-center justify-content-center shadow-sm border w-100'>
                         <img
                             className='m-1 p-0'
                             alt='show me'

@@ -119,7 +119,7 @@ function SignUp() {
                     </div>
                     <div className='m-1 d-flex align-items-center justify-content-center'>
                         <button
-                            className='btn bg-light m-2 d-flex align-items-center justify-content-center shadow-sm'
+                            className='btn bg-white d-flex align-items-center justify-content-center shadow-sm border w-100'
                             type='button'
                             onClick={() => { console.log("Sign in with google clicked") }}
                         >
