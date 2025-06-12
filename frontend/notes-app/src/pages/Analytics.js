@@ -13,9 +13,12 @@ function AnalyticsPage() {
 
     const getUserInfo = async () => {
         try {
-            const response = await axiosInstance.get("/get-user");
-            if (response.data && response.data.user) {
-                setUserInfo(response.data.user);
+            const token = localStorage.getItem('token');
+            if (token) {
+                const response = await axiosInstance.get("/get-user");
+                if (response.data && response.data.user) {
+                    setUserInfo(response.data.user);
+                }
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -27,33 +30,35 @@ function AnalyticsPage() {
     const CountNotes = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axiosInstance.get('/get-all-notes', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (!response.data.error) {
-                const allNotes = response.data.notes;
-                setNotes(allNotes);
-
-                let done = 0;
-                let pending = 0;
-                let progress = 0;
-
-                allNotes.forEach(note => {
-                    if (note.status === "Done") {
-                        done++;
-                    } else if (note.status === "Pending") {
-                        pending++;
-                    } else {
-                        progress++;
-                    }
+            if (token) {
+                const response = await axiosInstance.get('/get-all-notes', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
 
-                setDoneNotes(done);
-                setPendingNotes(pending);
-                setProgressNotes(progress);
+                if (!response.data.error) {
+                    const allNotes = response.data.notes;
+                    setNotes(allNotes);
+
+                    let done = 0;
+                    let pending = 0;
+                    let progress = 0;
+
+                    allNotes.forEach(note => {
+                        if (note.status === "Done") {
+                            done++;
+                        } else if (note.status === "Pending") {
+                            pending++;
+                        } else {
+                            progress++;
+                        }
+                    });
+
+                    setDoneNotes(done);
+                    setPendingNotes(pending);
+                    setProgressNotes(progress);
+                }
             }
         } catch (error) {
             console.error("Error fetching notes:", error);

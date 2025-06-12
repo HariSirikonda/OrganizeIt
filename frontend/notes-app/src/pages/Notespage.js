@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../components/Navbar';
 import Notes from '../components/Notes';
 import PlusIcon from '../assets/plus.png';
 import CloseIcon from '../assets/remove.png';
 import axiosInstance from '../utils/axiosInstance';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { FastForward } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 
 function Notespage() {
@@ -124,34 +122,27 @@ function Notespage() {
     const fetchNotes = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axiosInstance.get('/get-all-notes', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            if (token) {
+                const response = await axiosInstance.get('/get-all-notes', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
 
-            if (!response.data.error) {
-                let allNotes = response.data.notes;
+                if (!response.data.error) {
+                    let allNotes = response.data.notes;
 
-                if (filterOption !== "All") {
-                    allNotes = allNotes.filter(note => note.status === filterOption);
+                    if (filterOption !== "All") {
+                        allNotes = allNotes.filter(note => note.status === filterOption);
+                    }
+
+                    setNotes(allNotes);
                 }
-
-                setNotes(allNotes);
-                console.log(notes);
             }
         } catch (error) {
             console.error("Error fetching notes:", error);
         }
     };
-
-    const location = useLocation();
-    const searchQuery = location.state?.searchQuery;
-
-    useEffect(() => {
-        console.log("Search Query Received:", searchQuery);
-        // You can now filter notes using searchQuery
-    }, [searchQuery]);
 
     useEffect(() => {
         fetchNotes();
@@ -266,8 +257,8 @@ function Notespage() {
                             <div>
                                 <span className="display-6">Please login to see your Notes...</span>
                             </div>
-                            <div class="spinner-border text-secondary" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                            <div className="spinner-border text-secondary" role="status">
+                                <span className="visually-hidden">Loading...</span>
                             </div>
                         </div>
                     </>

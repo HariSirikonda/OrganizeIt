@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import GoogleIcon from '../assets/google.png';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 function SignUp() {
     const [fullName, setFullName] = useState("");
@@ -43,6 +46,34 @@ function SignUp() {
         }
     };
 
+    const handleSignUpSuccess = async (credentialResponse) => {
+        const decoded = jwtDecode(credentialResponse.credential);
+        console.log(decoded);
+        const payLoad = {
+            fullName: decoded.name,
+            email: decoded.email,
+            password: decoded.sub,
+            confirmPassword: decoded.sub,
+            isGoogleAuth: true,
+        }
+        try {
+            const response = await axiosInstance.post("/create-account", payLoad);
+            console.log("user created", response);
+            if (response.data.message === "User already exists") {
+                alert("User already Exits.");
+            }
+            else if (response.data.message === "Registration Successful") {
+                navigate("/login");
+            }
+        } catch (error) {
+            console.error(error.response?.data || error.message);
+        }
+    };
+
+    const handleSignUpError = () => {
+        console.log("Login Failed");
+    };
+
     useEffect(() => {
         if (error) {
             alert(error);
@@ -64,6 +95,7 @@ function SignUp() {
                             className="form-control shadow-none"
                             onChange={(e) => { setFullName(e.target.value) }}
                             id="Username"
+                            value={fullName}
                             placeholder="name@example.com"
                         />
                         <label htmlFor="floatingInput">Full Name</label>
@@ -74,6 +106,7 @@ function SignUp() {
                             className="form-control shadow-none"
                             onChange={(e) => { setEmail(e.target.value) }}
                             id="email"
+                            value={email}
                             placeholder="name@example.com"
                         />
                         <label htmlFor="floatingInput">Email address</label>
@@ -118,19 +151,11 @@ function SignUp() {
                         <b>OR</b>
                     </div>
                     <div className='m-1 d-flex align-items-center justify-content-center'>
-                        <button
-                            className='btn bg-white d-flex align-items-center justify-content-center shadow-sm border w-100'
-                            type='button'
-                            onClick={() => { console.log("Sign in with google clicked") }}
-                        >
-                            <img
-                                className='m-1 p-0'
-                                alt='show me'
-                                src={GoogleIcon}
-                                style={{ width: "30px", height: "30px" }}
-                            ></img>
-                            <span className='text-dark mx-2'>Sign Up with Google</span>
-                        </button>
+                        {/* Google Login Button */}
+                        <GoogleLogin
+                            onSuccess={handleSignUpSuccess}
+                            onError={handleSignUpError}
+                        />
                     </div>
                 </form>
             </section>

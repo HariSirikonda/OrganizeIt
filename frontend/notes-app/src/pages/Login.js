@@ -4,6 +4,9 @@ import LinkedIcon from '../assets/linkedin.png';
 import FacebookIcon from '../assets/facebook.png';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -39,6 +42,30 @@ function Login() {
         }
     };
 
+    const handleLoginSuccess = async (credentialResponse) => {
+        const decoded = jwtDecode(credentialResponse.credential);
+        const payLoad = { email: decoded.email, password: decoded.sub };
+        console.log("User Info:", decoded);
+        try {
+            const response = await axiosInstance.post("/login", payLoad);
+            if (response.data && response.data.accessToken) {
+                localStorage.setItem("token", response.data.accessToken);
+                navigate("/home");
+                window.location.reload();
+            }
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message);
+            } else {
+                setError("An Unexpected error occured, try again.!");
+            }
+        }
+    };
+
+    const handleLoginError = () => {
+        console.log("Login Failed");
+    };
+
     useEffect(() => {
         if (error) {
             alert(error);
@@ -58,7 +85,14 @@ function Login() {
                 </div>
                 {/* {error && <p className="text-danger">{error}</p>} */}
                 <div className="form-floating mb-2 ">
-                    <input type="email" className="form-control shadow-none" id="Username" onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" required />
+                    <input
+                        type="email"
+                        className="form-control shadow-none"
+                        id="Username"
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
+                        placeholder="name@example.com" required
+                    />
                     <label htmlFor="Username">Email address</label>
                 </div>
                 <div className="form-floating ">
@@ -72,7 +106,12 @@ function Login() {
                     >
                     </input>
                     <div className="mb-3 form-check m-1">
-                        <input type="checkbox" className="form-check-input shadow-none border-dark" id="exampleCheck1" onChange={(e) => setHide(!hide)} />
+                        <input
+                            type="checkbox"
+                            className="form-check-input shadow-none border-dark"
+                            id="exampleCheck1"
+                            onChange={(e) => setHide(!hide)}
+                        />
                         <label className="form-check-label" htmlFor="exampleCheck1">Show Password</label>
                     </div>
                     <label htmlFor="Password">Password</label>
@@ -83,15 +122,11 @@ function Login() {
                 <button id="ContinueButton" type="submit" className="submit_btn btn btn-md nav-color text-white shadow-none w-100 my-2 p-1"><b>Login</b></button>
                 <div className="text-center text-uppercase text-muted mb-1"><b>OR</b></div>
                 <div className='m-1 d-flex align-items-center justify-content-center'>
-                    <button className='btn bg-white d-flex align-items-center justify-content-center shadow-sm border w-100'>
-                        <img
-                            className='m-1 p-0'
-                            alt='show me'
-                            src={GoogleIcon}
-                            style={{ width: "30px", height: "30px" }}
-                        ></img>
-                        <span className='text-dark mx-2'>Sign Up with Google</span>
-                    </button>
+                    {/* Google Login Button */}
+                    <GoogleLogin
+                        onSuccess={handleLoginSuccess}
+                        onError={handleLoginError}
+                    />
                 </div>
             </form>
         </>

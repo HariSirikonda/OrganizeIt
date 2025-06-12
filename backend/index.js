@@ -34,20 +34,29 @@ app.get('/', (req, res) => {
 
 // Create Account Route
 app.post("/create-account", async (req, res) => {
-    const { fullName, email, password } = req.body;
+    const { fullName, email, password, isGoogleAuth } = req.body;
 
-    if (!fullName || !email || !password) {
-        return res.status(400).json({ error: true, message: "All fields are required" });
+    if (!fullName || !email || (!password && !isGoogleAuth)) {
+        return res.status(400).json({ error: true, message: "Required fields missing" });
     }
 
     const isUser = await User.findOne({ email });
+
     if (isUser) {
         return res.json({ error: true, message: "User already exists" });
     }
 
-    // Generate salt and hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    let hashedPassword = '';
+
+    if (isGoogleAuth) {
+        // For Google users, use a fake password (hashed)
+        const salt = await bcrypt.genSalt(10);
+        hashedPassword = await bcrypt.hash(password || email + Date.now(), salt);
+    } else {
+        // For manual signup
+        const salt = await bcrypt.genSalt(10);
+        hashedPassword = await bcrypt.hash(password, salt);
+    }
 
     const newUser = new User({ fullName, email, password: hashedPassword });
     await newUser.save();
@@ -63,6 +72,7 @@ app.post("/create-account", async (req, res) => {
         message: "Registration Successful"
     });
 });
+
 
 //Login route
 app.post("/login", async (req, res) => {
