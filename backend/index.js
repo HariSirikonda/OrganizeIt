@@ -1,3 +1,4 @@
+require("./reminderScheduler");
 require("dotenv").config();
 const bcrypt = require('bcryptjs');
 const express = require('express');
@@ -145,7 +146,7 @@ app.get("/get-user", authenticateToken, async (req, res) => {
 
 //Add Note Route
 app.post("/add-note", authenticateToken, async (req, res) => {
-    const { title, description, status } = req.body;
+    const { title, description, status, reminderDate, isReminderSet } = req.body;
     const { user } = req.user;
     if (!title) {
         return res.status(400).json({ error: true, message: "Tilte is required" });
@@ -158,6 +159,8 @@ app.post("/add-note", authenticateToken, async (req, res) => {
             title,
             description,
             status,
+            reminderDate,
+            isReminderSet,
             userId: user._id,
         });
         await note.save();

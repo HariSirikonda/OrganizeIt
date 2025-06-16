@@ -22,8 +22,7 @@ function Notespage() {
     const navigate = useNavigate();
     const pinnedNotes = notes.filter(note => note.isPinned);
     const unpinnedNotes = notes.filter(note => !note.isPinned);
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedTime, setSelectedTime] = useState(null);
+    const [reminderDate, setReminderDate] = useState("");
 
     const handleClickCancle = () => {
         setAddNote(false);
@@ -57,8 +56,13 @@ function Notespage() {
                 }
             } else {
                 const response = await axiosInstance.post(
-                    "/add-note",
-                    { title, description, status },
+                    "/add-note", {
+                    title,
+                    description,
+                    status,
+                    reminderDate: new Date(reminderDate).toISOString(),
+                    isReminderSet: true,
+                },
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -75,6 +79,7 @@ function Notespage() {
             setTitle("");
             setDescription("");
             setAddNote(false);
+            setReminderDate("");
             await fetchNotes();
 
         } catch (err) {
@@ -160,10 +165,6 @@ function Notespage() {
     const hanldeUpdateNotes = () => {
         navigate(0);
     };
-
-    const handleSetRemainder = () => {
-        console.log(`Remainder set on ${selectedDate} at ${selectedTime}`);
-    }
 
     return (
         <div>
@@ -324,36 +325,11 @@ function Notespage() {
                         <div className='d-flex align-items-center justify-content-start mx-1'>
                             <div className="btn-group p-1" role="group" aria-label="Basic radio toggle button group">
                                 <input
-                                    type='date'
-                                    id='start'
+                                    type='datetime-local'
                                     className='form-control'
-                                    name='reminder'
-                                    value={selectedDate}
-                                    min="2025-06-13"
-                                    max="2025-12-31"
-                                    onChange={(e) => setSelectedDate(e.target.value)}
+                                    value={reminderDate}
+                                    onChange={(e) => setReminderDate(e.target.value)}
                                 />
-                            </div>
-                            <div className="btn-group p-1" role="group" aria-label="Basic radio toggle button group">
-                                <input
-                                    type='time'
-                                    id='start'
-                                    className='form-control'
-                                    name='reminder'
-                                    value={selectedTime}
-                                    min="2025-06-13"
-                                    max="2025-12-31"
-                                    onChange={(e) => setSelectedTime(e.target.value)}
-                                //stopped here
-                                />
-                            </div>
-                            <div className='p-1'>
-                                <button
-                                    className='btn form-control btn-primary text-decoration-none shadow-none'
-                                    onClick={handleSetRemainder}
-                                >
-                                    Set Remainder
-                                </button>
                             </div>
                         </div>
                     </div>

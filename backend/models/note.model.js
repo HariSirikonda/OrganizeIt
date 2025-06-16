@@ -11,7 +11,9 @@ const noteSchema = new Schema({
     },
     createdAt: { type: Date, default: Date.now },
     isPinned: { type: Boolean, default: false },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" } // optional: link to user
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    reminderDate: { type: Date },
+    isReminderSet: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("Note", noteSchema);
