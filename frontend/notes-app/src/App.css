@@ -145,17 +145,17 @@ body {
 }
 
 .done-status {
-    background-color: rgb(204, 255, 204);
+    background-color: rgb(219, 255, 213);
     padding: 2px;
 }
 
 .progress-status {
-    background-color: rgb(251, 230, 210);
+    background-color: rgb(255, 231, 208);
     padding: 2px;
 }
 
 .not-started-status {
-    background-color: rgb(243, 216, 218);
+    background-color: rgb(253, 218, 215);
     padding: 2px;
 }
 

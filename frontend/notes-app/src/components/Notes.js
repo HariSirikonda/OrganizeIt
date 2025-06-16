@@ -24,32 +24,27 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirmDe
         handleTogglePin(id, newPinStatus);
     }
 
+    const backgroundColor = () => {
+        if (status === "Pending") {
+            return "not-started-status";
+        } else if (status === "In Progress") {
+            return "progress-status";
+        } else {
+            return "done-status";
+        }
+    }
+
     return (
         <div>
-            <div className='box rounded shadow p-2 mt-1 mb-3' style={{ width: '420px' }}>
+            <div className={`box rounded ${backgroundColor()} shadow p-2 mt-1 mb-3`} style={{ width: '420px' }}>
                 <div className='d-flex align-items-center ps-1'>
                     <div className='me-2'>
                         <h4 className='m-0'>{title}</h4>
                     </div>
                     <div className='d-flex align-items-center ms-auto'>
-                        <button className='btn shadow-sm' onClick={handleEdit}>
-                            <img src={Edit} alt='edit' style={{ width: '20px', height: '20px' }} />
-                        </button>
                         <button className='btn shadow-sm' onClick={() => handleConfirmDelete(id)}>
                             <img src={Delete} alt='edit' style={{ width: '20px', height: '20px' }} />
                         </button>
-                        <div className='ps-2 mt-1 text-dark'>
-                            <span
-                                className={`rounded px-1 ${status === "Done"
-                                    ? "done-status"
-                                    : status === "In Progress"
-                                        ? "progress-status"
-                                        : "not-started-status"
-                                    }`}
-                            >
-                                {status}
-                            </span>
-                        </div>
                     </div>
                 </div>
                 <div>
@@ -73,6 +68,9 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirmDe
 
                     >
                         <img src={pinned ? PinnedImg : PinImg} alt='show me' style={{ width: "20px", height: "20px" }} />
+                    </button>
+                    <button className='btn shadow-sm' onClick={handleEdit}>
+                        <img src={Edit} alt='edit' style={{ width: '20px', height: '20px' }} />
                     </button>
                 </div>
             </div>
