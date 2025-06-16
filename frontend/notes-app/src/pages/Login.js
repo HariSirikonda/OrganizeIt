@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import GoogleIcon from '../assets/google.png';
-import LinkedIcon from '../assets/linkedin.png';
-import FacebookIcon from '../assets/facebook.png';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 import { GoogleLogin } from '@react-oauth/google';

@@ -4,6 +4,7 @@ import PlusIcon from '../assets/plus.png';
 import CloseIcon from '../assets/remove.png';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import "react-datepicker/dist/react-datepicker.css";
 
 
 function Notespage() {
@@ -21,7 +22,15 @@ function Notespage() {
     const navigate = useNavigate();
     const pinnedNotes = notes.filter(note => note.isPinned);
     const unpinnedNotes = notes.filter(note => !note.isPinned);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
 
+    const handleClickCancle = () => {
+        setAddNote(false);
+        setTitle("");
+        setDescription("");
+        setIsEditMode(false);
+    }
 
     const handleAddNote = async (e) => {
         e.preventDefault();
@@ -152,6 +161,10 @@ function Notespage() {
         navigate(0);
     };
 
+    const handleSetRemainder = () => {
+        console.log(`Remainder set on ${selectedDate} at ${selectedTime}`);
+    }
+
     return (
         <div>
             {showConfirm && (
@@ -267,7 +280,7 @@ function Notespage() {
             {addNote && (
                 <div className='notes-form bg-light' style={{ width: '1000px', height: '500px' }}>
                     <div className='d-flex align-items-end justify-content-end'>
-                        <img className='m-1' src={CloseIcon} alt='Close' style={{ width: '30px', height: '30px' }} onClick={() => setAddNote(false)} />
+                        <img className='m-1' src={CloseIcon} alt='Close' style={{ width: '30px', height: '30px' }} onClick={handleClickCancle} />
                     </div>
                     <div className='p-2 mb-1'>
                         <h5>Title of the Notes</h5>
@@ -290,12 +303,12 @@ function Notespage() {
                             placeholder='Write your description here'
                             required></textarea>
                     </div>
-                    <div className='d-flex p-2 mb-1 align-items-center'>
-                        <div className='d-flex w-50 align-items-center justify-content-start mx-1'>
-                            <div className='me-2'>
-                                <h5 className='m-0'>Current Status:</h5>
+                    <div className='d-flex p-2 mb-1 align-items-start justify-content-start'>
+                        <div className='d-flex align-items-center justify-content-start mx-1 p-1'>
+                            <div className='p-1'>
+                                <p className='m-0'>Current Status :</p>
                             </div>
-                            <div className="btn-group p-1" role="group" aria-label="Basic radio toggle button group">
+                            <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
                                 <select
                                     className="form-select border-dark text-decoration shadow-none"
                                     aria-label="Default select example"
@@ -308,6 +321,41 @@ function Notespage() {
                                 </select>
                             </div>
                         </div>
+                        <div className='d-flex align-items-center justify-content-start mx-1'>
+                            <div className="btn-group p-1" role="group" aria-label="Basic radio toggle button group">
+                                <input
+                                    type='date'
+                                    id='start'
+                                    className='form-control'
+                                    name='reminder'
+                                    value={selectedDate}
+                                    min="2025-06-13"
+                                    max="2025-12-31"
+                                    onChange={(e) => setSelectedDate(e.target.value)}
+                                />
+                            </div>
+                            <div className="btn-group p-1" role="group" aria-label="Basic radio toggle button group">
+                                <input
+                                    type='time'
+                                    id='start'
+                                    className='form-control'
+                                    name='reminder'
+                                    value={selectedTime}
+                                    min="2025-06-13"
+                                    max="2025-12-31"
+                                    onChange={(e) => setSelectedTime(e.target.value)}
+                                //stopped here
+                                />
+                            </div>
+                            <div className='p-1'>
+                                <button
+                                    className='btn form-control btn-primary text-decoration-none shadow-none'
+                                    onClick={handleSetRemainder}
+                                >
+                                    Set Remainder
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div className='d-flex align-items-end justify-content-end mt-2 mb-0'>
                         <div>
@@ -318,7 +366,12 @@ function Notespage() {
                             >
                                 {isEditMode ? "Update" : "Save"}
                             </button>
-                            <button className='btn btn-sm btn-light shadow-none mx-1' onClick={() => setAddNote(false)}>Cancel</button>
+                            <button
+                                className='btn btn-sm btn-light shadow-none mx-1'
+                                onClick={handleClickCancle}
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
