@@ -32,6 +32,12 @@ function Notespage() {
         setIsEditMode(false);
     };
 
+    const dateNow = () => {
+        const now = new Date();
+        const offset = now.getTimezoneOffset();
+        const localDate = new Date(now.getTime() - offset * 60 * 1000); // adjust to local time
+        return localDate.toISOString().slice(0, 16); // "YYYY-MM-DDTHH:MM"
+    }
     const handleAddNote = async (e) => {
         e.preventDefault();
 
@@ -96,12 +102,18 @@ function Notespage() {
         setDescription(note.description);
         setStatus(note.status);
         setEditNoteId(note._id);
-        const formatted = new Date(note.reminderDate).toISOString().slice(0, 16);
+
+        const formatted = note.reminderDate
+            ? new Date(note.reminderDate).toISOString().slice(0, 16)
+            : '';
+
         setReminderDate(formatted);
-        console.log(`remainder date got back from data base ${reminderDate}`);
+        console.log(`Reminder date got back from database: ${formatted}`);
+
         setIsEditMode(true);
         setAddNote(true);
     };
+
 
     const deleteNote = async (ID) => {
         try {
@@ -333,6 +345,7 @@ function Notespage() {
                                 <input
                                     type='datetime-local'
                                     className='form-control'
+                                    min={dateNow()}
                                     value={reminderDate}
                                     onChange={(e) => setReminderDate(e.target.value)}
                                 />

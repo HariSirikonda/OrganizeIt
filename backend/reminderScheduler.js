@@ -32,7 +32,7 @@ cron.schedule("* * * * *", async () => {
         });
         console.log(`📧 Reminder sent to ${note.userId.email} for note: ${note.title}`);
 
-
+        note.reminderDate = null;
         note.isReminderSet = false;
         await note.save();
     }
