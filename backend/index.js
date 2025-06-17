@@ -174,7 +174,7 @@ app.post("/add-note", authenticateToken, async (req, res) => {
 //Edit Note Route
 app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
     const noteId = req.params.noteId;
-    const { title, description, status } = req.body;
+    const { title, description, status, reminderDate, isReminderSet } = req.body;
     const { user } = req;
 
     if (!title && !description && !status) {
@@ -197,6 +197,8 @@ app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
         if (title) note.title = title;
         if (description) note.description = description;
         if (status) note.status = status;
+        if (reminderDate) note.reminderDate = reminderDate;
+        if (isReminderSet) note.isReminderSet = isReminderSet;
 
         await note.save();
 

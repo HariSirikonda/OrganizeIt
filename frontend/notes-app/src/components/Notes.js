@@ -32,46 +32,48 @@ function Notes({ id, title, date, description, status, isPinned, handleConfirmDe
         } else {
             return "done-status";
         }
-    }
+    };
 
     return (
         <div>
             <div className={`box rounded ${backgroundColor()} shadow p-2 mt-1 mb-3`} style={{ width: '420px' }}>
-                <div className='d-flex align-items-center ps-1'>
-                    <div className='me-2'>
-                        <h4 className='m-0'>{title}</h4>
+                <div>
+                    <div className='d-flex align-items-center ps-1'>
+                        <div className='me-2'>
+                            <h4 className='m-0'>{title}</h4>
+                        </div>
+                        <div className='d-flex align-items-center ms-auto'>
+                            <button className='btn shadow-sm' onClick={() => handleConfirmDelete(id)}>
+                                <img src={Delete} alt='edit' style={{ width: '20px', height: '20px' }} />
+                            </button>
+                        </div>
                     </div>
-                    <div className='d-flex align-items-center ms-auto'>
-                        <button className='btn shadow-sm' onClick={() => handleConfirmDelete(id)}>
-                            <img src={Delete} alt='edit' style={{ width: '20px', height: '20px' }} />
+                    <div>
+                        <span className='text-start rounded px-1 fs-8'>{date}</span>
+                    </div>
+                    <div className='m-1 pt-2 pb-2' style={{ wordBreak: 'break-word' }}>
+                        {getDisplayText()}
+                        {description.length > limit && (
+                            <span
+                                onClick={toggleExpanded}
+                                style={{ color: 'blue', cursor: 'pointer', marginLeft: '5px', fontSize: '14px' }}
+                            >
+                                {expanded ? 'Show less' : 'Show more'}
+                            </span>
+                        )}
+                    </div>
+                    <div className="d-flex justify-content-end">
+                        <button
+                            className='btn shadow-sm'
+                            onClick={togglePin}
+
+                        >
+                            <img src={pinned ? PinnedImg : PinImg} alt='show me' style={{ width: "20px", height: "20px" }} />
+                        </button>
+                        <button className='btn shadow-sm' onClick={handleEdit}>
+                            <img src={Edit} alt='edit' style={{ width: '20px', height: '20px' }} />
                         </button>
                     </div>
-                </div>
-                <div>
-                    <span className='text-start rounded px-1 fs-8'>{date}</span>
-                </div>
-                <div className='m-1 pt-2 pb-2' style={{ wordBreak: 'break-word' }}>
-                    {getDisplayText()}
-                    {description.length > limit && (
-                        <span
-                            onClick={toggleExpanded}
-                            style={{ color: 'blue', cursor: 'pointer', marginLeft: '5px', fontSize: '14px' }}
-                        >
-                            {expanded ? 'Show less' : 'Show more'}
-                        </span>
-                    )}
-                </div>
-                <div className="d-flex justify-content-end">
-                    <button
-                        className='btn shadow-sm'
-                        onClick={togglePin}
-
-                    >
-                        <img src={pinned ? PinnedImg : PinImg} alt='show me' style={{ width: "20px", height: "20px" }} />
-                    </button>
-                    <button className='btn shadow-sm' onClick={handleEdit}>
-                        <img src={Edit} alt='edit' style={{ width: '20px', height: '20px' }} />
-                    </button>
                 </div>
             </div>
         </div>

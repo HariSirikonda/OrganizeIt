@@ -27,9 +27,10 @@ function Notespage() {
     const handleClickCancle = () => {
         setAddNote(false);
         setTitle("");
+        setReminderDate("");
         setDescription("");
         setIsEditMode(false);
-    }
+    };
 
     const handleAddNote = async (e) => {
         e.preventDefault();
@@ -45,6 +46,8 @@ function Notespage() {
                     title,
                     description,
                     status,
+                    reminderDate: reminderDate ? new Date(reminderDate).toISOString() : null,
+                    isReminderSet: true,
                 });
 
                 if (!response.data.error) {
@@ -60,7 +63,7 @@ function Notespage() {
                     title,
                     description,
                     status,
-                    reminderDate: new Date(reminderDate).toISOString(),
+                    reminderDate: reminderDate ? new Date(reminderDate).toISOString() : null,
                     isReminderSet: true,
                 },
                     {
@@ -93,6 +96,9 @@ function Notespage() {
         setDescription(note.description);
         setStatus(note.status);
         setEditNoteId(note._id);
+        const formatted = new Date(note.reminderDate).toISOString().slice(0, 16);
+        setReminderDate(formatted);
+        console.log(`remainder date got back from data base ${reminderDate}`);
         setIsEditMode(true);
         setAddNote(true);
     };
