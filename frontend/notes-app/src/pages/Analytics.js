@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import axiosInstance from "../utils/axiosInstance";
 import ShareButton from "../assets/share.png";
 
@@ -131,33 +130,38 @@ function AnalyticsPage() {
                             </div>
                         </div>
                         {/* Cache table */}
-                        <div class="table-responsive">
-                            <table class="table table-striped align-middle">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Note</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className="table-row">
-                                        <td>Gaming Mouse</td>
-                                        <td>2025-05-28</td>
-                                        <td><span class="badge bg-danger">Pending</span></td>
-                                    </tr>
-                                    <tr className="table-row">
-                                        <td>Bluetooth Speaker</td>
-                                        <td>2025-05-27</td>
-                                        <td><span class="badge bg-success text-dark">done</span></td>
-                                    </tr>
-                                    <tr className="table-row">
-                                        <td>Bluetooth Speaker</td>
-                                        <td>2025-05-27</td>
-                                        <td><span class="badge bg-success text-dark">done</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div className="text-center">
+                            <h2>Remainders section</h2>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-center">
+                            <div class="table table-hover w-50">
+                                <table class="table table-striped align-middle">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Note</th>
+                                            <th>Date & Time</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="table-row">
+                                            <td>Gaming Mouse</td>
+                                            <td>2025-05-28</td>
+                                            <td><span class="badge bg-danger">Pending</span></td>
+                                        </tr>
+                                        <tr className="table-row">
+                                            <td>Bluetooth Speaker</td>
+                                            <td>2025-05-27</td>
+                                            <td><span class="badge bg-success text-white">done</span></td>
+                                        </tr>
+                                        <tr className="table-row">
+                                            <td>Bluetooth Speaker</td>
+                                            <td>2025-05-27</td>
+                                            <td><span class="badge bg-success text-white">done</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </>
                 ) : (
