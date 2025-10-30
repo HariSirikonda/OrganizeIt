@@ -48,13 +48,15 @@ function Notespage() {
             }
 
             if (isEditMode) {
+                console.log("before update route")
                 const response = await axiosInstance.put(`/edit-note/${editNoteId}`, {
                     title,
                     description,
                     status,
-                    reminderDate: reminderDate ? new Date(reminderDate).toISOString() : null,
-                    isReminderSet: true,
+                    reminderDate: reminderDate ? new Date(reminderDate).toISOString() : "",
+                    isReminderSet: !!reminderDate,
                 });
+                console.log("before update route")
 
                 if (!response.data.error) {
                     setIsEditMode(false);
@@ -69,8 +71,8 @@ function Notespage() {
                     title,
                     description,
                     status,
-                    reminderDate: reminderDate ? new Date(reminderDate).toISOString() : null,
-                    isReminderSet: true,
+                    reminderDate: reminderDate ? new Date(reminderDate).toISOString() : "",
+                    isReminderSet: !!reminderDate,
                 },
                     {
                         headers: {
@@ -320,7 +322,8 @@ function Notespage() {
                             onChange={(e) => { setDescription(e.target.value) }}
                             style={{ height: '150px' }}
                             placeholder='Write your description here'
-                            required></textarea>
+                            required
+                        ></textarea>
                     </div>
                     <div className='d-flex p-2 mb-1 align-items-start justify-content-start'>
                         <div className='d-flex align-items-center justify-content-start mx-1 p-1'>

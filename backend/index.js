@@ -10,7 +10,7 @@ const Note = require("./models/note.model");
 
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
@@ -159,7 +159,7 @@ app.post("/add-note", authenticateToken, async (req, res) => {
             title,
             description,
             status,
-            reminderDate,
+            reminderDate: reminderDate === "" ? "" : new Date(reminderDate),
             isReminderSet,
             userId: user._id,
         });
@@ -197,7 +197,7 @@ app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
         if (title) note.title = title;
         if (description) note.description = description;
         if (status) note.status = status;
-        if (reminderDate) note.reminderDate = reminderDate;
+        if (reminderDate) reminderDate = reminderDate === "" ? "" : new Date(reminderDate);
         if (isReminderSet) note.isReminderSet = isReminderSet;
 
         await note.save();
@@ -234,6 +234,71 @@ app.get("/get-all-notes", authenticateToken, async (req, res) => {
             error: true,
             message: "Internal Server Error",
         });
+    }
+});
+app.get("/analytics/notifications", authenticateToken, async (req, res) => {
+    const { user } = req.user;
+    try {
+        const now = new Date();
+        const notes = await Note.find({ userId: user._id }).select(
+            "title description status reminderDate isReminderSet createdAt isPinned"
+        );
+
+        let counts = {
+            totalNotes: 0,
+            byStatus: { Pending: 0, "In Progress": 0, Done: 0 },
+            reminderSet: 0,
+            reminderNotSet: 0,
+            upcoming: 0,
+            overdue: 0,
+            sent: 0,
+        };
+
+        const annotated = notes.map((n) => {
+            counts.totalNotes += 1;
+            if (n.status && counts.byStatus[n.status] !== undefined) {
+                counts.byStatus[n.status] += 1;
+            }
+
+            let reminderStatus = "none";
+            if (n.isReminderSet && n.reminderDate) {
+                counts.reminderSet += 1;
+                if (n.reminderDate <= now) {
+                    reminderStatus = "overdue";
+                    counts.overdue += 1;
+                } else {
+                    reminderStatus = "upcoming";
+                    counts.upcoming += 1;
+                }
+            } else if (!n.isReminderSet && n.reminderDate && n.reminderDate <= now) {
+                reminderStatus = "sent";
+                counts.sent += 1;
+                counts.reminderNotSet += 1;
+            } else {
+                counts.reminderNotSet += 1;
+            }
+
+            return {
+                _id: n._id,
+                title: n.title,
+                description: n.description,
+                status: n.status,
+                reminderDate: n.reminderDate,
+                isReminderSet: n.isReminderSet,
+                reminderStatus,
+                createdAt: n.createdAt,
+                isPinned: n.isPinned,
+            };
+        });
+
+        return res.json({
+            error: false,
+            summary: counts,
+            notes: annotated,
+            message: "Analytics computed successfully",
+        });
+    } catch (error) {
+        return res.status(500).json({ error: true, message: "Internal Server Error" });
     }
 });
 

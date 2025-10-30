@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import ShareButton from "../assets/share.png";
 
 function AnalyticsPage() {
     const [isLoggedIn] = useState(localStorage.getItem('token'));
     const [userInfo, setUserInfo] = useState(null);
-    const [notes, setNotes] = useState(null);
+    const [notes, setNotes] = useState([]);
     const [doneNotes, setDoneNotes] = useState(0);
     const [progressNotes, setProgressNotes] = useState(0);
     const [pendingNotes, setPendingNotes] = useState(0);
+    const [filterStatus, setFilterStatus] = useState("all");
+    const [filterReminderStatus, setFilterReminderStatus] = useState("all");
+    const [sortBy, setSortBy] = useState("reminderDateDesc");
 
     const getUserInfo = async () => {
         try {
@@ -30,33 +33,19 @@ function AnalyticsPage() {
         try {
             const token = localStorage.getItem('token');
             if (token) {
-                const response = await axiosInstance.get('/get-all-notes', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                const response = await axiosInstance.get('/analytics/notifications', {
+                    headers: { Authorization: `Bearer ${token}` },
                 });
 
                 if (!response.data.error) {
-                    const allNotes = response.data.notes;
+                    const allNotes = response.data.notes || [];
                     setNotes(allNotes);
 
-                    let done = 0;
-                    let pending = 0;
-                    let progress = 0;
-
-                    allNotes.forEach(note => {
-                        if (note.status === "Done") {
-                            done++;
-                        } else if (note.status === "Pending") {
-                            pending++;
-                        } else {
-                            progress++;
-                        }
-                    });
-
-                    setDoneNotes(done);
-                    setPendingNotes(pending);
-                    setProgressNotes(progress);
+                    const summary = response.data.summary || {};
+                    const byStatus = summary.byStatus || {};
+                    setDoneNotes(byStatus["Done"] || 0);
+                    setPendingNotes(byStatus["Pending"] || 0);
+                    setProgressNotes(byStatus["In Progress"] || 0);
                 }
             }
         } catch (error) {
@@ -78,6 +67,24 @@ function AnalyticsPage() {
         getUserInfo();
         CountNotes();
     }, []); //Update not oon the initial load here --
+
+    const filteredAndSortedNotes = useMemo(() => {
+        let list = [...notes];
+        if (filterStatus !== "all") {
+            list = list.filter(n => n.status === filterStatus);
+        }
+        if (filterReminderStatus !== "all") {
+            list = list.filter(n => (n.reminderStatus || "none") === filterReminderStatus);
+        }
+        list.sort((a, b) => {
+            const aTime = a.reminderDate ? new Date(a.reminderDate).getTime() : 0;
+            const bTime = b.reminderDate ? new Date(b.reminderDate).getTime() : 0;
+            if (sortBy === "reminderDateAsc") return aTime - bTime;
+            if (sortBy === "reminderDateDesc") return bTime - aTime;
+            return 0;
+        });
+        return list;
+    }, [notes, filterStatus, filterReminderStatus, sortBy]);
 
     return (
         <>
@@ -129,39 +136,86 @@ function AnalyticsPage() {
                                 <h1 className="text-center text-danger fw-bold display-2">{pendingNotes}</h1>
                             </div>
                         </div>
-                        {/* Cache table */}
-                        <div className="text-center">
-                            <h2>Remainders section</h2>
-                        </div>
                         <div className="d-flex align-items-center justify-content-center">
-                            <div class="table table-hover w-50">
-                                <table class="table table-striped align-middle">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Note</th>
-                                            <th>Date & Time</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="table-row">
-                                            <td>Gaming Mouse</td>
-                                            <td>2025-05-28</td>
-                                            <td><span class="badge bg-danger">Pending</span></td>
-                                        </tr>
-                                        <tr className="table-row">
-                                            <td>Bluetooth Speaker</td>
-                                            <td>2025-05-27</td>
-                                            <td><span class="badge bg-success text-white">done</span></td>
-                                        </tr>
-                                        <tr className="table-row">
-                                            <td>Bluetooth Speaker</td>
-                                            <td>2025-05-27</td>
-                                            <td><span class="badge bg-success text-white">done</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            {notes && notes.length > 0 ? (
+                                <div className="w-100">
+                                    <div className="d-flex gap-3 mb-3 align-items-end">
+                                        <div>
+                                            <label className="form-label">Task Status</label>
+                                            <select className="form-select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                                                <option value="all">All</option>
+                                                <option value="Pending">Pending</option>
+                                                <option value="In Progress">In Progress</option>
+                                                <option value="Done">Done</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="form-label">Notification Status</label>
+                                            <select className="form-select" value={filterReminderStatus} onChange={(e) => setFilterReminderStatus(e.target.value)}>
+                                                <option value="all">All</option>
+                                                <option value="upcoming">Upcoming</option>
+                                                <option value="overdue">Overdue</option>
+                                                <option value="sent">Sent</option>
+                                                <option value="none">None</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="form-label">Sort by Reminder</label>
+                                            <select className="form-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                                                <option value="reminderDateDesc">Newest first</option>
+                                                <option value="reminderDateAsc">Oldest first</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <table className="table table-striped table-hover align-middle text-center">
+                                        <thead className="table-dark">
+                                            <tr>
+                                                <th>#</th>
+                                                <th className="text-start">Title</th>
+                                                <th className="text-start">Description</th>
+                                                <th className="text-start">Task Status</th>
+                                                <th className="text-start">Notification Status</th>
+                                                <th className="text-start">Reminder Date</th>
+                                                <th className="text-start">Reminder Set</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {filteredAndSortedNotes.map((note, index) => (
+                                                <tr key={note._id || index}>
+                                                    <td>{index + 1}</td>
+                                                    <td className="fw-semibold text-start">{note.title}</td>
+                                                    <td className="text-start" style={{ maxWidth: "250px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                                        {note.description}
+                                                    </td>
+                                                    <td className="text-start">{note.status}</td>
+                                                    <td className="text-start">
+                                                        <span className={`badge ${
+                                                            note.reminderStatus === 'overdue' ? 'bg-danger' :
+                                                            note.reminderStatus === 'upcoming' ? 'bg-info text-dark' :
+                                                            note.reminderStatus === 'sent' ? 'bg-success' : 'bg-secondary'
+                                                        }`}>
+                                                            {note.reminderStatus ? note.reminderStatus.toUpperCase() : 'NONE'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="text-start">
+                                                        {note.reminderDate
+                                                            ? new Date(note.reminderDate).toLocaleString()
+                                                            : <span className="text-muted">N/A</span>}
+                                                    </td>
+                                                    <td className="text-start">
+                                                        {note.isReminderSet
+                                                            ? <span className="badge bg-primary">Yes</span>
+                                                            : <span className="badge bg-secondary">No</span>}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ) : (
+                                <div className="bg-light w-100 text-center p-2 fs-4">No notes available..!</div>
+                            )}
                         </div>
                     </>
                 ) : (
