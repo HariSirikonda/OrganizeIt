@@ -11,36 +11,40 @@ const Note = require("./models/note.model");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-// Frontend origin(s).
-// Use FRONTEND_ORIGINS for a comma-separated allowlist (e.g. "http://localhost:3000,https://myapp.example.com").
-// Falls back to FRONTEND_ORIGIN for single-value compatibility.
-const FRONTEND_ORIGINS = (process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN || "http://localhost:3000")
-    .split(",")
-    .map(s => s.trim())
-    .filter(Boolean);
+// Frontend origin(s)
+const ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'https://your-frontend-url.onrender.com',
+    'https://your-backend-url.onrender.com'
+];
 
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
 const { urlencoded } = require("body-parser");
-// Middleware
-// Allow requests only from configured frontend origin(s).
-// If FRONTEND_ALLOW_CREDENTIALS=true is set, CORS will allow credentials.
-const allowCredentials = String(process.env.FRONTEND_ALLOW_CREDENTIALS).toLowerCase() === 'true';
 
+// CORS configuration
 app.use(cors({
     origin: function (origin, callback) {
-        // If no origin (e.g., server-to-server or curl), allow the request
+        // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
-
-        if (FRONTEND_ORIGINS.indexOf(origin) !== -1) {
+        
+        // Check if the origin is in the allowed list
+        if (ALLOWED_ORIGINS.includes(origin) || 
+            process.env.NODE_ENV === 'development') {
             return callback(null, true);
         }
-
-        // Not allowed
-        return callback(new Error('CORS policy: Origin not allowed'), false);
+        
+        // Log unauthorized origins for debugging
+        console.warn('CORS: Blocked request from origin:', origin);
+        return callback(new Error('CORS: Origin not allowed'), false);
     },
-    credentials: allowCredentials
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
+
+// Handle preflight requests
+app.options('*', cors());
 app.use(express.json()); // required to parse JSON body
 app.use(urlencoded({ extended: true }));
 

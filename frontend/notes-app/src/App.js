@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import Home from './pages/Home';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -10,9 +11,11 @@ import LoginPage from './pages/LoginPage';
 import AnalyticsPage from './pages/Analytics';
 import Navbar from './components/Navbar';
 
+const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '411217303166-2n3f3q2r4s5t6u7v8w9x0y1z2a3b4c5d.apps.googleusercontent.com';
+
 function App() {
   return (
-    <GoogleOAuthProvider clientId='411217303166-hanqujb7jf60i5fkkgk5fuagg7tv3g9d.apps.googleusercontent.com'>
+    <GoogleOAuthProvider clientId={googleClientId}>
       <div className="App">
         <BrowserRouter>
           <Navbar />
