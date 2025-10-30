@@ -11,14 +11,36 @@ const Note = require("./models/note.model");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
+// Frontend origin(s).
+// Use FRONTEND_ORIGINS for a comma-separated allowlist (e.g. "http://localhost:3000,https://myapp.example.com").
+// Falls back to FRONTEND_ORIGIN for single-value compatibility.
+const FRONTEND_ORIGINS = (process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN || "http://localhost:3000")
+    .split(",")
+    .map(s => s.trim())
+    .filter(Boolean);
 
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
 const { urlencoded } = require("body-parser");
 // Middleware
-// Allow requests only from the configured frontend origin. Set FRONTEND_ORIGIN in your backend .env
-app.use(cors({ origin: FRONTEND_ORIGIN }));
+// Allow requests only from configured frontend origin(s).
+// If FRONTEND_ALLOW_CREDENTIALS=true is set, CORS will allow credentials.
+const allowCredentials = String(process.env.FRONTEND_ALLOW_CREDENTIALS).toLowerCase() === 'true';
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // If no origin (e.g., server-to-server or curl), allow the request
+        if (!origin) return callback(null, true);
+
+        if (FRONTEND_ORIGINS.indexOf(origin) !== -1) {
+            return callback(null, true);
+        }
+
+        // Not allowed
+        return callback(new Error('CORS policy: Origin not allowed'), false);
+    },
+    credentials: allowCredentials
+}));
 app.use(express.json()); // required to parse JSON body
 app.use(urlencoded({ extended: true }));
 
