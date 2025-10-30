@@ -11,12 +11,14 @@ const Note = require("./models/note.model");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
 
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
 const { urlencoded } = require("body-parser");
 // Middleware
-app.use(cors());
+// Allow requests only from the configured frontend origin. Set FRONTEND_ORIGIN in your backend .env
+app.use(cors({ origin: FRONTEND_ORIGIN }));
 app.use(express.json()); // required to parse JSON body
 app.use(urlencoded({ extended: true }));
 
